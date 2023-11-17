@@ -3,6 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use Illuminate\Http\JsonResponse;
+
+use App\Http\Controllers\Api\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +18,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('test', function () {
+    return new JsonResponse([
+        'message' => 'Hello from staging : ok!'
+    ], 200);
+});
+
+Route::prefix('auth')->group(function () {
+    Route::post('register', [UserController::class, 'register']);
+    Route::post('login', [UserController::class, 'login']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('profile', [UserController::class, 'profile']);
+    // Route::put('profile', [UserController::class, 'update']);
+
+    Route::middleware('bki')->prefix('bki')->group(function () {
+
+    });
 });
