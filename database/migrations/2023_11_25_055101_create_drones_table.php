@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('drones', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->integer('id', true);
             $table->string('name');
             $table->string('serial_number')->nullable();
             $table->integer('weight_no_payload')->nullable();
@@ -35,9 +35,14 @@ return new class extends Migration
             $table->string('communication_system')->nullable();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
+            $table->string('cert_emergency_procedure')->nullable();
+            $table->string('cert_insurance_doc')->nullable();
+            $table->string('cert_equipment_list')->nullable();
+            $table->string('cert_drone_photo')->nullable();
+            $table->string('cert_drone_certificate')->nullable();
+            $table->date('expiration_date')->nullable();
             $table->dateTime('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
-            $table->integer('drone_licences_id')->index('fk_drones_drone_licences1_idx');
         });
     }
 

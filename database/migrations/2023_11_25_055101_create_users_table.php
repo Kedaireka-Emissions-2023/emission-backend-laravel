@@ -27,8 +27,6 @@ return new class extends Migration
             $table->enum('status', ['VALID', 'EXPIRED'])->nullable()->default('EXPIRED');
             $table->dateTime('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
-
-            // From boilerplate
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
         });

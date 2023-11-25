@@ -13,8 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('drones', function (Blueprint $table) {
-            $table->foreign(['drone_licences_id'], 'fk_drones_drone_licences1')->references(['id'])->on('drone_licences')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+        Schema::create('password_reset_tokens', function (Blueprint $table) {
+            $table->string('email')->primary();
+            $table->string('token');
+            $table->timestamp('created_at')->nullable();
         });
     }
 
@@ -25,8 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('drones', function (Blueprint $table) {
-            $table->dropForeign('fk_drones_drone_licences1');
-        });
+        Schema::dropIfExists('password_reset_tokens');
     }
 };
