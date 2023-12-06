@@ -36,7 +36,7 @@ Route::prefix('auth')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile', [UserController::class, 'profile']);
 
-    Route::middleware('port', 'pilot', 'bki')->group(function () {
+    Route::middleware('bki_pilot_port')->group(function () {
         // Vessel
         Route::get('vessels', [VesselController::class, 'getAll']);
         Route::get('vessels/{id}', [VesselController::class, 'getVesselbyId']);
@@ -57,7 +57,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('ports/{id}', [PortController::class, 'getPortbyId']);
     });
 
-    Route::middleware('port', 'vessel')->group(function (){
+    Route::middleware('bki_port')->group(function (){
         // Vessel
         Route::post('vessels', [VesselController::class, 'createVessel']);
         Route::put('vessels/{id}', [VesselController::class, 'updateVessel']);
