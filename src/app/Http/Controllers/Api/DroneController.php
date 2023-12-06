@@ -11,10 +11,13 @@ class DroneController extends Controller
 {
     public function getAll()
     {
-        $drones = Drone::all();
+        $query = Drone::query();
+        $limit = request()->input('limit', 10);
+        $filtered = $query->paginate($limit);
+
         return response()->json([
             'message' => 'Success',
-            'data' => $drones
+            'data' => $filtered
         ], 200);
     }
 
