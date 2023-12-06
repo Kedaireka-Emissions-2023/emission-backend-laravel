@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class IsPort
+class IsBkiPilotPort
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class IsPort
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user() &&  (Auth::user()->role == 'PORT')) {
+        if (Auth::user() &&  ((Auth::user()->role == 'BKI') || (Auth::user()->role == 'PILOT') || (Auth::user()->role == 'PORT'))) {
             return $next($request);
         }
         return response()->json([

@@ -67,5 +67,7 @@ class Kernel extends HttpKernel
         'port' => \App\Http\Middleware\IsPort::class,
         'bki' => \App\Http\Middleware\IsBki::class,
         'pilot' => \App\Http\Middleware\IsPilot::class,
+        'bki_pilot_port' => \App\Http\Middleware\IsBkiPilotPort::class,
+        'bki_port' => \App\Http\Middleware\IsBkiPort::class,
     ];
 }

@@ -27,14 +27,13 @@ return new class extends Migration
             $table->decimal('max_takeoff_weight', 10, 5)->nullable();
             $table->decimal('max_flight_range', 10, 5)->nullable();
             $table->decimal('max_speed', 10, 5)->nullable();
-            $table->decimal('max_cruise_head', 10, 5)->nullable();
+            $table->decimal('max_cruise_height', 10, 5)->nullable();
             $table->decimal('operational_payload_weight', 10, 5)->nullable();
             $table->string('proximity_sensor')->nullable();
             $table->string('precision_landinig_mechanism')->nullable();
             $table->string('operation_system')->nullable();
             $table->string('communication_system')->nullable();
             $table->text('description')->nullable();
-            $table->string('image')->nullable();
             $table->string('cert_emergency_procedure')->nullable();
             $table->string('cert_insurance_doc')->nullable();
             $table->string('cert_equipment_list')->nullable();
