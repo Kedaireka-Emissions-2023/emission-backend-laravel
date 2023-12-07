@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('emissions', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->integer('drones_id')->index('fk_drones_has_vessels_drones1_idx');
-            $table->integer('vessels_id')->index('fk_drones_has_vessels_vessels1_idx');
+            $table->integer('drone_id')->index('fk_drones_has_vessels_drones1_idx');
+            $table->integer('vessel_id')->index('fk_drones_has_vessels_vessels1_idx');
             $table->string('name')->nullable();
             $table->decimal('levels', 10, 5)->nullable()->comment('Emission percentage (%)');
             $table->decimal('lkh_th', 10, 5)->nullable()->comment('LKH Threshold');

@@ -21,17 +21,17 @@ class Drone extends Model
         'wing_material',
         'fuselage_material',
         'filesave_system',
+        'control_system',
         'max_takeoff_weight',
         'max_flight_range',
         'max_speed',
-        'max_cruise_head',
+        'max_cruise_height',
         'operational_payload_weight',
         'proximity_sensor',
         'precision_landinig_mechanism',
         'operation_system',
         'communication_system',
         'description',
-        'image',
         'cert_emergency_procedure',
         'cert_insurance_doc',
         'cert_equipment_list',
@@ -44,12 +44,12 @@ class Drone extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'pilots', 'drones_id', 'users_id')
-                    ->as('pilots');
+        return $this->belongsToMany(User::class, 'pilots', 'drone_id', 'user_id')
+            ->as('pilots');
     }
 
     public function emissions(): HasMany
     {
-        return $this->hasMany(Emission::class, 'drones_id', 'id');
+        return $this->hasMany(Emission::class, 'drone_id', 'id');
     }
 }

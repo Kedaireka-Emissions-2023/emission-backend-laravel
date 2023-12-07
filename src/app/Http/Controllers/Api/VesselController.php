@@ -3,15 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Port;
 use Illuminate\Http\Request;
 
 use App\Models\Vessel;
 
 class VesselController extends Controller
 {
-    public function getAll()
+    public function getAll(Request $request)
     {
-        $vessels = Vessel::all();
+        $page = $request->query('page');
+        $limit = $request->query('limit');
+
+        $vessels = Vessel::paginate($limit, ['*'], 'page', $page);
         return response()->json([
             'message' => 'Success',
             'data' => $vessels
@@ -36,9 +40,25 @@ class VesselController extends Controller
 
     public function createVessel(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required',
+                'port_id' => 'required',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error',
+                'data' => $e->getMessage()
+            ], 400);
+        }
+
+        $port = Port::find($request->port_id);
+        if (!$port) {
+            return response()->json([
+                'message' => 'Port not found',
+                'data' => null
+            ], 400);
+        }
 
         $vessel = Vessel::create($request->all());
 
@@ -71,7 +91,7 @@ class VesselController extends Controller
         if ($vessel) {
             $vessel->delete();
             return response()->json([
-                'message' => 'Success',
+                'message' => 'Vessel deleted',
                 'data' => $vessel
             ], 200);
         } else {
