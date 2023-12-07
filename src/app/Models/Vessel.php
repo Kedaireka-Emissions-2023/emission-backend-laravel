@@ -33,16 +33,16 @@ class Vessel extends Model
         'aux_eng_fuel',
         'created_at',
         'updated_at',
-        'ports_id',
+        'port_id',
     ];
 
     public function emissions(): HasMany
     {
-        return $this->hasMany(Emission::class, 'vessels_id', 'id');
+        return $this->hasMany(Emission::class, 'vessel_id', 'id');
     }
 
     public function port(): BelongsTo
     {
-        return $this->belongsTo(Port::class, 'ports_id', 'id');
+        return $this->belongsTo(Port::class, 'port_id', 'id');
     }
 }

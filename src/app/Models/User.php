@@ -55,7 +55,7 @@ class User extends Authenticatable
 
     public function drones(): BelongsToMany
     {
-        return $this->belongsToMany(Drone::class, 'pilots', 'users_id', 'drones_id')
-                    ->as('pilots');
+        return $this->belongsToMany(Drone::class, 'pilots', 'user_id', 'drone_id')
+            ->as('pilots');
     }
 }

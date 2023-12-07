@@ -22,6 +22,6 @@ class Port extends Model
 
     public function vessels(): HasMany
     {
-        return $this->hasMany(Vessel::class, 'ports_id', 'id');
+        return $this->hasMany(Vessel::class, 'port_id', 'id');
     }
 }

@@ -11,8 +11,8 @@ class Emission extends Model
     use HasFactory;
     protected $fillable = [
         'id',
-        'drones_id',
-        'vessels_id',
+        'drone_id',
+        'vessel_id',
         'name',
         'levels',
         'lkh_th',
@@ -24,11 +24,11 @@ class Emission extends Model
 
     public function drones(): BelongsTo
     {
-        return $this->belongsTo(Drone::class, 'drones_id', 'id');
+        return $this->belongsTo(Drone::class, 'drone_id', 'id');
     }
 
     public function vessels(): BelongsTo
     {
-        return $this->belongsTo(Vessel::class, 'vessels_id', 'id');
+        return $this->belongsTo(Vessel::class, 'vessel_id', 'id');
     }
 }

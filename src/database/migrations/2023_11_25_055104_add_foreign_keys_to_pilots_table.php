@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('pilots', function (Blueprint $table) {
-            $table->foreign(['users_id'], 'fk_drones_has_users_users1')->references(['id'])->on('users')->onUpdate('NO ACTION')->onDelete('NO ACTION');
-            $table->foreign(['drones_id'], 'fk_drones_has_users_drones1')->references(['id'])->on('drones')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+            $table->foreign(['user_id'], 'fk_drones_has_users_users1')->references(['id'])->on('users')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+            $table->foreign(['drone_id'], 'fk_drones_has_users_drones1')->references(['id'])->on('drones')->onUpdate('NO ACTION')->onDelete('NO ACTION');
         });
     }
 
