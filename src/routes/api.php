@@ -36,7 +36,7 @@ Route::prefix('auth')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile', [UserController::class, 'profile']);
 
-    Route::middleware('bki_pilot_port')->group(function () {
+    Route::middleware('role:BKI,PILOT,PORT')->group(function () {
         // Vessel
         Route::get('vessels', [VesselController::class, 'getAll']);
         Route::get('vessels/{id}', [VesselController::class, 'getVesselbyId']);
@@ -57,25 +57,24 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('ports/{id}', [PortController::class, 'getPortbyId']);
     });
 
-    Route::middleware('bki_port')->group(function (){
+    Route::middleware('role:BKI,PORT')->group(function () {
         // Vessel
         Route::post('vessels', [VesselController::class, 'createVessel']);
         Route::put('vessels/{id}', [VesselController::class, 'updateVessel']);
         Route::delete('vessels/{id}', [VesselController::class, 'deleteVessel']);
     });
 
-    Route::middleware('bki')->group(function () {
+    Route::middleware('role:BKI')->group(function () {
         // Port
         Route::post('ports', [PortController::class, 'createPort']);
         Route::put('ports/{id}', [PortController::class, 'updatePort']);
         Route::delete('ports/{id}', [PortController::class, 'deletePort']);
     });
 
-    Route::middleware('pilot')->group(function () {
+    Route::middleware('role:PILOT')->group(function () {
         // Emission
         Route::post('emissions', [EmissionController::class, 'createEmission']);
         Route::put('emissions/{id}', [EmissionController::class, 'updateEmission']);
         Route::delete('emissions/{id}', [EmissionController::class, 'deleteEmission']);
     });
-
 });

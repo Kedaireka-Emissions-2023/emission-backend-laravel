@@ -9,9 +9,12 @@ use App\Models\Port;
 
 class PortController extends Controller
 {
-    public function getAll()
+    public function getAll(Request $request)
     {
-        $ports = Port::all();
+        $page = $request->query('page');
+        $limit = $request->query('limit');
+
+        $ports = Port::paginate($limit, ['*'], 'page', $page);
         return response()->json([
             'message' => 'Success',
             'data' => $ports
@@ -36,9 +39,16 @@ class PortController extends Controller
 
     public function createPort(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error',
+                'data' => $e->getMessage()
+            ], 400);
+        }
 
         $port = Port::create($request->all());
 

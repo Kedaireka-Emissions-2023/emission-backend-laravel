@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('wing_material')->nullable();
             $table->string('fuselage_material')->nullable();
             $table->string('filesave_system')->nullable();
+            $table->string('control_system')->nullable();
             $table->decimal('max_takeoff_weight', 10, 5)->nullable();
             $table->decimal('max_flight_range', 10, 5)->nullable();
             $table->decimal('max_speed', 10, 5)->nullable();

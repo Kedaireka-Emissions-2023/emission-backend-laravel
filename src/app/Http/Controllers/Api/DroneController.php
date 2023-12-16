@@ -9,15 +9,16 @@ use App\Models\Drone;
 
 class DroneController extends Controller
 {
-    public function getAll()
+    public function getAll(Request $request)
     {
-        $query = Drone::query();
-        $limit = request()->input('limit', 10);
-        $filtered = $query->paginate($limit);
+        $page = $request->query('page');
+        $limit = $request->query('limit');
+
+        $drones = Drone::paginate($limit, ['*'], 'page', $page);
 
         return response()->json([
             'message' => 'Success',
-            'data' => $filtered
+            'data' => $drones
         ], 200);
     }
 
@@ -39,9 +40,16 @@ class DroneController extends Controller
 
     public function createDrone(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error',
+                'data' => $e->getMessage()
+            ], 400);
+        }
 
         $drone = Drone::create($request->all());
 
@@ -74,7 +82,7 @@ class DroneController extends Controller
         if ($drone) {
             $drone->delete();
             return response()->json([
-                'message' => 'Success',
+                'message' => 'Drone deleted',
                 'data' => $drone
             ], 200);
         } else {

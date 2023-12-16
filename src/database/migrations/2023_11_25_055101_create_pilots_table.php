@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('pilots', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->integer('drones_id')->index('fk_drones_has_users_drones1_idx');
-            $table->integer('users_id')->index('fk_drones_has_users_users1_idx');
+            $table->integer('drone_id')->index('fk_drones_has_users_drones1_idx');
+            $table->integer('user_id')->index('fk_drones_has_users_users1_idx');
         });
     }
 

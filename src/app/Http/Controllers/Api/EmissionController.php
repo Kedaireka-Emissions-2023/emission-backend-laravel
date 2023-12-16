@@ -9,9 +9,12 @@ use App\Models\Emission;
 
 class EmissionController extends Controller
 {
-    public function getAll()
+    public function getAll(Request $request)
     {
-        $emissions = Emission::all();
+        $page = $request->query('page');
+        $limit = $request->query('limit');
+
+        $emissions = Emission::paginate($limit, ['*'], 'page', $page);
         return response()->json([
             'message' => 'Success',
             'data' => $emissions
@@ -36,9 +39,18 @@ class EmissionController extends Controller
 
     public function createEmission(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required',
+                'drone_id' => 'required',
+                'vessel_id' => 'required',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error',
+                'data' => $e->getMessage()
+            ], 400);
+        }
 
         $emission = Emission::create($request->all());
 
