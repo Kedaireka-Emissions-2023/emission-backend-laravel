@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  app:
+    image: php:8.1-fpm-alpine
+    container_name: emission-backend-container
+    working_dir: /app
+    volumes:
+      - ./src:/app
+    networks:
+      - backend-network
+    command: sh /app/docker/startup.sh
+
+  webserver:
+    image: nginx:latest
+    container_name: nginx-container
+    volumes:
+      - ./src:/app
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf
+    environment:
+      - LISTEN_PORT=8443
+    ports:
+      - "8080:8080"  # Adjust the port mapping as needed
+    depends_on:
+      - app
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge
