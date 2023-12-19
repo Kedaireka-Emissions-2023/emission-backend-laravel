@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Cloudinary\Configuration\Configuration;
 use Cloudinary\Api\Upload\UploadApi;
+use Yaza\LaravelGoogleDriveStorage\Gdrive;
 
 use App\Models\Drone;
 
@@ -34,6 +35,33 @@ class DroneController extends Controller
         //delete storage
         Storage::delete($path);
         return $result;
+    }
+
+    private function uploadToDrive($image)
+    {
+        $path = $image->store('public/images');
+        $imageUrl = Storage::path($path);
+
+        Gdrive::put($imageUrl, $image);
+
+        //delete storage
+        Storage::delete($path);
+        return $path;
+    }
+
+    public function get_test($id)
+    {
+        $drone = Drone::find($id);
+        if ($drone) {
+            $filePath = "/Users/t-okyan.ramadhana/KEDAIREKA/emission-backend-laravel/src/storage/app/" . $drone->cert_insurance_doc;
+            $data = Gdrive::get($filePath);
+            return response($data->file, 200)->header('Content-Type', $data->ext);
+        } else {
+            return response()->json([
+                'message' => 'Drone not found',
+                'data' => null
+            ], 404);
+        }
     }
 
     public function getAll(Request $request)
@@ -78,7 +106,30 @@ class DroneController extends Controller
             ], 400);
         }
 
-        $cert_emergency_procedure = $this->uploadImage($request->file('cert_emergency_procedure'));
+        if($request->hasFile('cert_emergency_procedure'))
+            $cert_emergency_procedure = $this->uploadToDrive($request->file('cert_emergency_procedure'));
+        else
+            $cert_emergency_procedure = null;
+
+        if($request->hasFile('cert_insurance_doc'))
+            $cert_insurance_doc = $this->uploadToDrive($request->file('cert_insurance_doc'));
+        else
+            $cert_insurance_doc = null;
+
+        if($request->hasFile('cert_equipment_list'))
+            $cert_equipment_list = $this->uploadToDrive($request->file('cert_equipment_list'));
+        else
+            $cert_equipment_list = null;
+
+        if($request->hasFile('cert_drone_photo'))
+            $cert_drone_photo = $this->uploadToDrive($request->file('cert_drone_photo'));
+        else
+            $cert_drone_photo = null;
+
+        if($request->hasFile('cert_drone_certificate'))
+            $cert_drone_certificate = $this->uploadToDrive($request->file('cert_drone_certificate'));
+        else
+            $cert_drone_certificate = null;
 
         $drone = new Drone();
         $drone->name = $request->name;
@@ -101,11 +152,11 @@ class DroneController extends Controller
         $drone->operation_system = $request->operation_system;
         $drone->communication_system = $request->communication_system;
         $drone->description = $request->description;
-        $drone->cert_emergency_procedure = $cert_emergency_procedure['secure_url'];
-        $drone->cert_insurance_doc = $request->cert_insurance_doc;
-        $drone->cert_equipment_list = $request->cert_equipment_list;
-        $drone->cert_drone_photo = $request->cert_drone_photo;
-        $drone->cert_drone_certificate = $request->cert_drone_certificate;
+        $drone->cert_emergency_procedure = $cert_emergency_procedure;
+        $drone->cert_insurance_doc = $cert_insurance_doc;
+        $drone->cert_equipment_list = $cert_equipment_list;
+        $drone->cert_drone_photo = $cert_drone_photo;
+        $drone->cert_drone_certificate = $cert_drone_certificate;
         $drone->expiration_date = $request->expiration_date;
         $drone->save();
 

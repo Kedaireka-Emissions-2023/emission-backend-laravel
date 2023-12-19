@@ -33,6 +33,8 @@ Route::prefix('auth')->group(function () {
     Route::post('login', [UserController::class, 'login']);
 });
 
+Route::get('test/{id}', [DroneController::class, 'get_test']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile', [UserController::class, 'profile']);
 
