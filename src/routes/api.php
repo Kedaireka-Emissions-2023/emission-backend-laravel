@@ -33,7 +33,11 @@ Route::prefix('auth')->group(function () {
     Route::post('login', [UserController::class, 'login']);
 });
 
-Route::get('test/{id}', [DroneController::class, 'get_test']);
+Route::get('drones/{id}/cert/ins', [DroneController::class, 'get_cert_insurance']);
+Route::get('drones/{id}/cert/ep', [DroneController::class, 'get_cert_emergency_procedure']);
+Route::get('drones/{id}/cert/el', [DroneController::class, 'get_cert_equipment_list']);
+Route::get('drones/{id}/cert/dp', [DroneController::class, 'get_cert_drone_photo']);
+Route::get('drones/{id}/cert/dc', [DroneController::class, 'get_cert_drone_certificate']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile', [UserController::class, 'profile']);

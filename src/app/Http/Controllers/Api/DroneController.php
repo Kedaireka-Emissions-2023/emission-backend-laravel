@@ -49,11 +49,71 @@ class DroneController extends Controller
         return $path;
     }
 
-    public function get_test($id)
+    public function get_cert_insurance($id)
     {
         $drone = Drone::find($id);
         if ($drone) {
-            $filePath = "/Users/t-okyan.ramadhana/KEDAIREKA/emission-backend-laravel/src/storage/app/" . $drone->cert_insurance_doc;
+            $filePath = "/app/storage/app/" . $drone->cert_insurance_doc;
+            $data = Gdrive::get($filePath);
+            return response($data->file, 200)->header('Content-Type', $data->ext);
+        } else {
+            return response()->json([
+                'message' => 'Drone not found',
+                'data' => null
+            ], 404);
+        }
+    }
+
+    public function get_cert_emergency_procedure($id)
+    {
+        $drone = Drone::find($id);
+        if ($drone) {
+            $filePath = "/app/storage/app/" . $drone->cert_emergency_procedure;
+            $data = Gdrive::get($filePath);
+            return response($data->file, 200)->header('Content-Type', $data->ext);
+        } else {
+            return response()->json([
+                'message' => 'Drone not found',
+                'data' => null
+            ], 404);
+        }
+    }
+
+    public function get_cert_equipment_list($id)
+    {
+        $drone = Drone::find($id);
+        if ($drone) {
+            $filePath = "/app/storage/app/" . $drone->cert_equipment_list;
+            $data = Gdrive::get($filePath);
+            return response($data->file, 200)->header('Content-Type', $data->ext);
+        } else {
+            return response()->json([
+                'message' => 'Drone not found',
+                'data' => null
+            ], 404);
+        }
+    }
+
+    public function get_cert_drone_photo($id)
+    {
+        $drone = Drone::find($id);
+        if ($drone) {
+            $filePath = "/app/storage/app/" . $drone->cert_drone_photo;
+            $data = Gdrive::get($filePath);
+            return response($data->file, 200)->header('Content-Type', $data->ext);
+        } else {
+            return response()->json([
+                'message' => 'Drone not found',
+                'data' => null
+            ], 404);
+        }
+    }
+
+    public function get_cert_drone_certificate($id)
+    {
+        $drone = Drone::find($id);
+        if ($drone) {
+            $filePath = "/app/storage/app/" . $drone->cert_drone_certificate;
             $data = Gdrive::get($filePath);
             return response($data->file, 200)->header('Content-Type', $data->ext);
         } else {
