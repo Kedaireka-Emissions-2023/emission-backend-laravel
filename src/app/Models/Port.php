@@ -16,6 +16,9 @@ class Port extends Model
         'office_address',
         'longitude',
         'latitude',
+        'city',
+        'phone_number',
+        'port_document',
         'created_at',
         'updated_at',
     ];

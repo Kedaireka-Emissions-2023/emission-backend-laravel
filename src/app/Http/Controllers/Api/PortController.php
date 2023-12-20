@@ -3,12 +3,28 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+use Yaza\LaravelGoogleDriveStorage\Gdrive;
 
 use App\Models\Port;
 
 class PortController extends Controller
 {
+    private function uploadToDrive($image)
+    {
+        $path = $image->store('public/images');
+        $imageUrl = Storage::path($path);
+
+        Gdrive::put($imageUrl, $image);
+
+        //delete storage
+        Storage::delete($path);
+        return $path;
+    }
+
     public function getAll(Request $request)
     {
         $page = $request->query('page');
@@ -37,6 +53,21 @@ class PortController extends Controller
         }
     }
 
+    public function get_port_document($id)
+    {
+        $port = Port::find($id);
+        if ($port) {
+            $filePath = "/app/storage/app/" . $port->port_document;
+            $data = Gdrive::get($filePath);
+            return response($data->file, 200)->header('Content-Type', $data->ext);
+        } else {
+            return response()->json([
+                'message' => 'Port not found',
+                'data' => null
+            ], 404);
+        }
+    }
+
     public function createPort(Request $request)
     {
         try {
@@ -49,8 +80,22 @@ class PortController extends Controller
                 'data' => $e->getMessage()
             ], 400);
         }
+        
+        if($request->hasFile('port_document'))
+            $port_document = $this->uploadToDrive($request->file('port_document'));
+        else
+            $port_document = null;
 
-        $port = Port::create($request->all());
+        $port = new Port();
+        $port->name = $request->name;
+        $port->operator_address = $request->operator_address;
+        $port->office_address = $request->office_address;
+        $port->city = $request->city;
+        $port->phone_number = $request->phone_number;
+        $port->port_document = $port_document;
+        $port->longitude = $request->longitude;
+        $port->latitude = $request->latitude;
+        $port->save();
 
         return response()->json([
             'message' => 'Success',
@@ -62,7 +107,22 @@ class PortController extends Controller
     {
         $port = Port::find($id);
         if ($port) {
-            $port->update($request->all());
+            
+            if($request->hasFile('port_document'))
+                $port_document = $this->uploadToDrive($request->file('port_document'));
+            else
+                $port_document = null;
+
+            $port->name = $request->name;
+            $port->operator_address = $request->operator_address;
+            $port->office_address = $request->office_address;
+            $port->city = $request->city;
+            $port->phone_number = $request->phone_number;
+            $port->port_document = $port_document;
+            $port->longitude = $request->longitude;
+            $port->latitude = $request->latitude;
+            $port->save();
+
             return response()->json([
                 'message' => 'Success',
                 'data' => $port
