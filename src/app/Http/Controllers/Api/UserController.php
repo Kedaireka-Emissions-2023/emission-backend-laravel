@@ -100,4 +100,16 @@ class UserController extends Controller
             ], 400);
         }
     }
+
+    public function getAllPilot(Request $request)
+    {
+        $page = $request->query('page');
+        $limit = $request->query('limit');
+
+        $pilots = User::where('role', 'PILOT')->paginate($limit, ['*'], 'page', $page);
+        return response()->json([
+            'message' => 'Success',
+            'data' => $pilots
+        ], 200);
+    }
 }
