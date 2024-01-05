@@ -155,20 +155,32 @@ class UserController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        // if password exist, compare it with confirmation_password
-        if ($request->has('password')) {
-            // check if password already match with password_confirmation
-            if ($request->password != $request->password_confirmation) {
+        if (($request->has('old_password') && $request->has('new_password') && $request->has('confirmation_password')))
+        {
+            if ($request->new_password != $request->confirmation_password) {
                 return response()->json([
-                    'message' => 'Password and password confirmation does not match',
+                    'message' => 'New Password and Confirmation Password must be the same!',
                 ], 400);
             }
 
-            if (!Hash::check($request->password, $user->password)) {
+            if (!Hash::check($request->old_password, $user->password)) {
                 return response()->json([
-                    'message' => 'Password confirmation failed',
+                    'message' => 'Old Password is incorrect',
                 ], 400);
             }
+
+            $user->password = Hash::make($request->new_password);
+
+        } elseif ($request->has('new_password') || $request->has('confirmation_password')) {
+            // New password-related fields are present, but old password is missing
+            return response()->json([
+                'message' => 'Old Password is required when updating the password',
+            ], 400);
+        } elseif ($request->has('old_password')) {
+            // Old password is present, but new password-related fields are missing
+            return response()->json([
+                'message' => 'New Password and Confirmation Password are required when updating the password',
+            ], 400);
         }
 
         if ($request->has('ktp')) {
