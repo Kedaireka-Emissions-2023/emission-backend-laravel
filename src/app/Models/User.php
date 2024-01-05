@@ -22,6 +22,7 @@ class User extends Authenticatable
         'id',
         'full_name',
         'email',
+        'email_recovery',
         'password',
         'role',
         'company_name',
@@ -29,6 +30,11 @@ class User extends Authenticatable
         'company_address',
         'nik',
         'status',
+
+        'ktp',
+        'certificate',
+        'exp_certificate',
+
         'created_at',
         'updated_at',
     ];

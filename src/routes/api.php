@@ -22,9 +22,9 @@ use App\Http\Controllers\Api\EmissionController;
 |
 */
 
-Route::get('test', function () {
+Route::get('', function () {
     return new JsonResponse([
-        'message' => 'Hello from staging : ok!'
+        'message' => 'Hello from production api : ok!'
     ], 200);
 });
 
@@ -45,6 +45,7 @@ Route::get('ports/{id}/doc', [PortController::class, 'get_port_document']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile', [UserController::class, 'profile']);
+    Route::put('users/update', [UserController::class, 'update']);
 
     Route::middleware('role:BKI,PILOT,PORT')->group(function () {
         // Vessel
