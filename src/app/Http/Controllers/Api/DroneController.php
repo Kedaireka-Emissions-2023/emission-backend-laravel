@@ -169,32 +169,38 @@ class DroneController extends Controller
             ], 400);
         }
 
-        if($request->hasFile('cert_emergency_procedure'))
-            $cert_emergency_procedure = $this->uploadToDrive($request->file('cert_emergency_procedure'));
-        else
-            $cert_emergency_procedure = null;
-
-        if($request->hasFile('cert_insurance_doc'))
-            $cert_insurance_doc = $this->uploadToDrive($request->file('cert_insurance_doc'));
-        else
-            $cert_insurance_doc = null;
-
-        if($request->hasFile('cert_equipment_list'))
-            $cert_equipment_list = $this->uploadToDrive($request->file('cert_equipment_list'));
-        else
-            $cert_equipment_list = null;
-
-        if($request->hasFile('cert_drone_photo'))
-            $cert_drone_photo = $this->uploadToDrive($request->file('cert_drone_photo'));
-        else
-            $cert_drone_photo = null;
-
-        if($request->hasFile('cert_drone_certificate'))
-            $cert_drone_certificate = $this->uploadToDrive($request->file('cert_drone_certificate'));
-        else
-            $cert_drone_certificate = null;
-
         $drone = new Drone();
+
+        if($request->hasFile('cert_emergency_procedure')){
+            $temp = $request->file('cert_emergency_procedure');
+            $res = $this->uploadImage($temp);
+            $drone->cert_emergency_procedure = $res['secure_url'];
+        }
+
+        if($request->hasFile('cert_insurance_doc')){
+            $temp = $request->file('cert_insurance_doc');
+            $res = $this->uploadImage($temp);
+            $drone->cert_insurance_doc = $res['secure_url'];
+        }
+
+        if($request->hasFile('cert_equipment_list')){
+            $temp = $request->file('cert_equipment_list');
+            $res = $this->uploadImage($temp);
+            $drone->cert_equipment_list = $res['secure_url'];
+        }
+
+        if($request->hasFile('cert_drone_photo')){
+            $temp = $request->file('cert_drone_photo');
+            $res = $this->uploadImage($temp);
+            $drone->cert_drone_photo = $res['secure_url'];
+        }
+
+        if($request->hasFile('cert_drone_certificate')){
+            $temp = $request->file('cert_drone_certificate');
+            $res = $this->uploadImage($temp);
+            $drone->cert_drone_certificate = $res['secure_url'];
+        }
+
         $drone->name = $request->name;
         $drone->serial_number = $request->serial_number;
         $drone->weight_no_payload = $request->weight_no_payload;
@@ -215,11 +221,6 @@ class DroneController extends Controller
         $drone->operation_system = $request->operation_system;
         $drone->communication_system = $request->communication_system;
         $drone->description = $request->description;
-        $drone->cert_emergency_procedure = $cert_emergency_procedure;
-        $drone->cert_insurance_doc = $cert_insurance_doc;
-        $drone->cert_equipment_list = $cert_equipment_list;
-        $drone->cert_drone_photo = $cert_drone_photo;
-        $drone->cert_drone_certificate = $cert_drone_certificate;
         $drone->expiration_date = $request->expiration_date;
         $drone->save();
 
