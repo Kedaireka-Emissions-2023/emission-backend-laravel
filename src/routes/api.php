@@ -45,7 +45,7 @@ Route::get('ports/{id}/doc', [PortController::class, 'get_port_document']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile', [UserController::class, 'profile']);
-    Route::put('users/update', [UserController::class, 'update']);
+    Route::post('users/update', [UserController::class, 'update']);
 
     Route::middleware('role:BKI,PILOT,PORT')->group(function () {
         // Vessel

@@ -5,16 +5,20 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+
 use Carbon\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 
-use App\Models\User;
-
 use Yaza\LaravelGoogleDriveStorage\Gdrive;
-use Illuminate\Support\Facades\Storage;
+
+use Cloudinary\Configuration\Configuration;
+use Cloudinary\Api\Upload\UploadApi;
+
+use App\Models\User;
 class UserController extends Controller
 {
     public function register(Request $request)
@@ -184,13 +188,15 @@ class UserController extends Controller
         }
 
         if ($request->has('ktp')) {
-            $path = $this->uploadToDrive($request->file('ktp'));
-            $user->ktp = $path;
+            $temp = $request->file('ktp');
+            $res = $this->uploadImage($temp);
+            $user->ktp = $res['secure_url'];
         }
 
         if ($request->has('certificate')) {
-            $path = $this->uploadToDrive($request->file('certificate'));
-            $user->certificate = $path;
+            $temp = $request->file('certificate');
+            $res = $this->uploadImage($temp);
+            $user->certificate = $res['secure_url'];
         }
 
         if($request->has('full_name')) $user->full_name = $request->full_name;
@@ -203,6 +209,7 @@ class UserController extends Controller
         if($request->has('company_address')) $user->company_address = $request->company_address;
         if($request->has('nik')) $user->nik = $request->nik;
         if($request->has('status')) $user->status = $request->input('status', 'EXPIRED');
+        if($request->has('exp_certificate')) $user->exp_certificate = $request->exp_certificate;
 
         $token = $user->createToken('authToken', ['*'], Carbon::now()->addHour(10));
 
@@ -213,6 +220,30 @@ class UserController extends Controller
             'user' => $user,
             'access_token' => $token,
         ]);
-}
+    }
+
+    private function uploadImage($image)
+    {
+        $path = $image->store('public/images');
+        $imageUrl = Storage::path($path);
+
+        $my_key = env('CLOUDINARY_API_KEY');
+        $my_secret = env('CLOUDINARY_API_SECRET');
+        $my_cloud = env('CLOUDINARY_CLOUD_NAME');
+        Configuration::instance([
+            'cloud' => [
+                'cloud_name' => $my_cloud,
+                'api_key' => $my_key,
+                'api_secret' => $my_secret
+            ]
+        ]);
+
+        $uploadApi = new UploadApi();
+        $result = $uploadApi->upload($imageUrl, ['resource_type' => 'auto']);
+
+        //delete storage
+        Storage::delete($path);
+        return $result;
+    }
 
 }

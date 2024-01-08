@@ -29,7 +29,7 @@ return new class extends Migration
 
             $table->string('ktp')->nullable();
             $table->string('certificate')->nullable();
-            $table->dateTime('exp_certificate')->nullable();
+            $table->date('exp_certificate')->nullable();
 
             $table->dateTime('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
