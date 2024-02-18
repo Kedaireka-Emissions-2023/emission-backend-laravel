@@ -22,9 +22,9 @@ use App\Http\Controllers\Api\EmissionController;
 |
 */
 
-Route::get('test', function () {
+Route::get('', function () {
     return new JsonResponse([
-        'message' => 'Hello from staging : ok!'
+        'message' => 'Hello from production api : ok!'
     ], 200);
 });
 
@@ -33,8 +33,19 @@ Route::prefix('auth')->group(function () {
     Route::post('login', [UserController::class, 'login']);
 });
 
+// Drone Certificate
+Route::get('drones/{id}/cert/ins', [DroneController::class, 'get_cert_insurance']);
+Route::get('drones/{id}/cert/ep', [DroneController::class, 'get_cert_emergency_procedure']);
+Route::get('drones/{id}/cert/el', [DroneController::class, 'get_cert_equipment_list']);
+Route::get('drones/{id}/cert/dp', [DroneController::class, 'get_cert_drone_photo']);
+Route::get('drones/{id}/cert/dc', [DroneController::class, 'get_cert_drone_certificate']);
+
+// Port Document
+Route::get('ports/{id}/doc', [PortController::class, 'get_port_document']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile', [UserController::class, 'profile']);
+    Route::post('users/update', [UserController::class, 'update']);
 
     Route::middleware('role:BKI,PILOT,PORT')->group(function () {
         // Vessel
@@ -69,6 +80,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('ports', [PortController::class, 'createPort']);
         Route::put('ports/{id}', [PortController::class, 'updatePort']);
         Route::delete('ports/{id}', [PortController::class, 'deletePort']);
+        // Pilot
+        Route::get('pilots', [UserController::class, 'getAllPilot']);
     });
 
     Route::middleware('role:PILOT')->group(function () {

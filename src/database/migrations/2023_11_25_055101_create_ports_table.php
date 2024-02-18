@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('name');
             $table->text('operator_address')->nullable();
             $table->text('office_address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('port_document')->nullable();
             $table->decimal('longitude', 10, 5)->nullable();
             $table->decimal('latitude', 10, 5)->nullable();
             $table->dateTime('created_at')->nullable();
