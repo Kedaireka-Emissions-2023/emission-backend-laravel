@@ -24,7 +24,6 @@ class PortController extends Controller
         Storage::delete($path);
         return $path;
     }
-
     public function getAll(Request $request)
     {
         $page = $request->query('page');
@@ -80,7 +79,6 @@ class PortController extends Controller
                 'data' => $e->getMessage()
             ], 400);
         }
-        
         if($request->hasFile('port_document'))
             $port_document = $this->uploadToDrive($request->file('port_document'));
         else
