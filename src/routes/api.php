@@ -87,7 +87,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:PILOT')->group(function () {
         // Emission
         Route::post('emissions', [EmissionController::class, 'createEmission']);
-        Route::put('emissions/{id}', [EmissionController::class, 'updateEmission']);
+        Route::post('update/emissions', [EmissionController::class, 'updateEmission']);
         Route::delete('emissions/{id}', [EmissionController::class, 'deleteEmission']);
     });
 });
