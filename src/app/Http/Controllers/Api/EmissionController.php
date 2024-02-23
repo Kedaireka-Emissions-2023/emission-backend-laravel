@@ -15,6 +15,7 @@ class EmissionController extends Controller
         $limit = $request->query('limit');
 
         $emissions = Emission::paginate($limit, ['*'], 'page', $page);
+        
         return response()->json([
             'message' => 'Success',
             'data' => $emissions
@@ -41,34 +42,47 @@ class EmissionController extends Controller
     {
         try {
             $request->validate([
-                'name' => 'required',
-                'drone_id' => 'required',
-                'vessel_id' => 'required',
+                'drone_id' => 'required|integer',
+                'vessel_id' => 'required|integer',
+                'name' => 'required|string',
+                'date' => 'required',
             ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error',
-                'data' => $e->getMessage()
-            ], 400);
-        }
 
-        $emission = Emission::create($request->all());
+            $emission = Emission::create($request->all());
 
-        return response()->json([
-            'message' => 'Success',
-            'data' => $emission
-        ], 201);
-    }
-
-    public function updateEmission(Request $request, $id)
-    {
-        $emission = Emission::find($id);
-        if ($emission) {
-            $emission->update($request->all());
             return response()->json([
                 'message' => 'Success',
                 'data' => $emission
-            ], 200);
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed',
+                'data' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function updateEmission(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer',
+        ]);
+
+        $emission = Emission::find($request->id);
+        if ($emission) {
+            try {
+                $emission->update($request->all());
+
+                return response()->json([
+                    'message' => 'Success',
+                    'data' => $emission
+                ], 200);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => 'Failed',
+                    'data' => $e->getMessage()
+                ], 500);
+            }
         } else {
             return response()->json([
                 'message' => 'Emission not found',
@@ -81,11 +95,19 @@ class EmissionController extends Controller
     {
         $emission = Emission::find($id);
         if ($emission) {
-            $emission->delete();
-            return response()->json([
-                'message' => 'Success',
-                'data' => $emission
-            ], 200);
+            try {
+                $emission->delete();
+
+                return response()->json([
+                    'message' => 'Success',
+                    'data' => null
+                ], 200);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => 'Failed',
+                    'data' => $e->getMessage()
+                ], 500);
+            }
         } else {
             return response()->json([
                 'message' => 'Emission not found',
