@@ -19,6 +19,7 @@ use Cloudinary\Configuration\Configuration;
 use Cloudinary\Api\Upload\UploadApi;
 
 use App\Models\User;
+
 class UserController extends Controller
 {
     public function register(Request $request)
@@ -118,8 +119,17 @@ class UserController extends Controller
     {
         $page = $request->query('page');
         $limit = $request->query('limit');
+        $query = $request->query('q');
 
-        $pilots = User::where('role', 'PILOT')->paginate($limit, ['*'], 'page', $page);
+        // $pilots = User::where('role', 'PILOT')->paginate($limit, ['*'], 'page', $page);
+        $pilots = User::where('role', 'PILOT')
+            ->where(function ($queryBuilder) use ($query) {
+                $queryBuilder->where('full_name', 'like', '%' . $query . '%')
+                    ->orWhere('email', 'like', '%' . $query . '%')
+                    ->orWhere('company_name', 'like', '%' . $query . '%');
+            })
+            ->paginate($limit, ['*'], 'page', $page);
+
         return response()->json([
             'message' => 'Success',
             'data' => $pilots
@@ -159,8 +169,7 @@ class UserController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        if (($request->has('old_password') && $request->has('new_password') && $request->has('confirmation_password')))
-        {
+        if (($request->has('old_password') && $request->has('new_password') && $request->has('confirmation_password'))) {
             if ($request->new_password != $request->confirmation_password) {
                 return response()->json([
                     'message' => 'New Password and Confirmation Password must be the same!',
@@ -174,7 +183,6 @@ class UserController extends Controller
             }
 
             $user->password = Hash::make($request->new_password);
-
         } elseif ($request->has('new_password') || $request->has('confirmation_password')) {
             // New password-related fields are present, but old password is missing
             return response()->json([
@@ -199,17 +207,17 @@ class UserController extends Controller
             $user->certificate = $res['secure_url'];
         }
 
-        if($request->has('full_name')) $user->full_name = $request->full_name;
-        if($request->has('email')) $user->email = $request->email;
-        if($request->has('email_recovery')) $user->email_recovery = $request->email_recovery;
-        if($request->has('password')) $user->password = Hash::make($request->password); // Hash password
-        if($request->has('role')) $user->role = $request->input('role', 'PILOT');
-        if($request->has('company_name')) $user->company_name = $request->company_name;
-        if($request->has('phone_number')) $user->phone_number = $request->phone_number;
-        if($request->has('company_address')) $user->company_address = $request->company_address;
-        if($request->has('nik')) $user->nik = $request->nik;
-        if($request->has('status')) $user->status = $request->input('status', 'EXPIRED');
-        if($request->has('exp_certificate')) $user->exp_certificate = $request->exp_certificate;
+        if ($request->has('full_name')) $user->full_name = $request->full_name;
+        if ($request->has('email')) $user->email = $request->email;
+        if ($request->has('email_recovery')) $user->email_recovery = $request->email_recovery;
+        if ($request->has('password')) $user->password = Hash::make($request->password); // Hash password
+        if ($request->has('role')) $user->role = $request->input('role', 'PILOT');
+        if ($request->has('company_name')) $user->company_name = $request->company_name;
+        if ($request->has('phone_number')) $user->phone_number = $request->phone_number;
+        if ($request->has('company_address')) $user->company_address = $request->company_address;
+        if ($request->has('nik')) $user->nik = $request->nik;
+        if ($request->has('status')) $user->status = $request->input('status', 'EXPIRED');
+        if ($request->has('exp_certificate')) $user->exp_certificate = $request->exp_certificate;
 
         $token = $user->createToken('authToken', ['*'], Carbon::now()->addHour(10));
 
@@ -245,5 +253,4 @@ class UserController extends Controller
         Storage::delete($path);
         return $result;
     }
-
 }

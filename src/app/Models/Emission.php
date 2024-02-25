@@ -16,6 +16,7 @@ class Emission extends Model
         'id',
         'drone_id',
         'vessel_id',
+        'port_id',
         'name',
         'pilot',
         'preparation',
@@ -25,6 +26,7 @@ class Emission extends Model
         'lkh_th',
         'osha_th',
         'who_th',
+        'link',
         'created_at',
         'updated_at',
     ];

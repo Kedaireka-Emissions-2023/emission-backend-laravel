@@ -36,7 +36,11 @@ return new class extends Migration
             $table->string('aux_eng_fuel')->nullable();
             $table->dateTime('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
-            $table->integer('port_id')->index('fk_vessels_port_idx');
+            $table->integer('port_id')->nullable()->index('fk_vessels_port_idx');
+
+            $table->foreign('port_id', 'fk_vessels_port')
+                ->references('id')->on('ports')
+                ->onDelete('set null');
         });
     }
 

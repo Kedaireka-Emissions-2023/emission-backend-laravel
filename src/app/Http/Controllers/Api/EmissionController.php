@@ -15,7 +15,7 @@ class EmissionController extends Controller
         $limit = $request->query('limit');
 
         $emissions = Emission::paginate($limit, ['*'], 'page', $page);
-        
+
         return response()->json([
             'message' => 'Success',
             'data' => $emissions
@@ -44,7 +44,9 @@ class EmissionController extends Controller
             $request->validate([
                 'drone_id' => 'required|integer',
                 'vessel_id' => 'required|integer',
-                'name' => 'required|string',
+                'port_id' => 'required|integer',
+                'link' => 'required|string',
+                // 'name' => 'required|string',
                 'date' => 'required',
             ]);
 

@@ -14,8 +14,13 @@ class VesselController extends Controller
     {
         $page = $request->query('page');
         $limit = $request->query('limit');
+        $query = $request->query('q');
 
-        $vessels = Vessel::paginate($limit, ['*'], 'page', $page);
+        // $vessels = Vessel::paginate($limit, ['*'], 'page', $page);
+        $vessels = Vessel::where('name', 'like', '%' . $query . '%')
+            ->orWhere('imo_number', 'like', '%' . $query . '%')
+            ->orWhere('type', 'like', '%' . $query . '%')
+            ->paginate($limit, ['*'], 'page', $page);
         return response()->json([
             'message' => 'Success',
             'data' => $vessels

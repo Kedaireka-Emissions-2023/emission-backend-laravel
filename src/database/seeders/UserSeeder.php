@@ -12,9 +12,9 @@ class UserSeeder extends Seeder
     {
         DB::table('users')->delete();
 
-        DB::table('users')->insert(array (
+        DB::table('users')->insert(array(
             0 =>
-            array (
+            array(
                 'id' => 1,
                 'full_name' => "Kedaireka BKI",
                 'email' => 'bki@kedaireka.com',
@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
                 'role' => 'BKI'
             ),
             1 =>
-            array (
+            array(
                 'id' => 2,
                 'full_name' => "Kedaireka Pilot",
                 'email' => 'pilot@kedaireka.com',
@@ -30,12 +30,20 @@ class UserSeeder extends Seeder
                 'role' => 'PILOT'
             ),
             2 =>
-            array (
+            array(
                 'id' => 3,
                 'full_name' => "Kedaireka PORT",
                 'email' => 'port@kedaireka.com',
                 'password' => bcrypt('Password'),
                 'role' => 'PORT'
+            ),
+            3 =>
+            array(
+                'id' => 4,
+                'full_name' => "Ultraman Pilot",
+                'email' => "ultramanpilot@kedaireka.com",
+                'password' => bcrypt('Password'),
+                'role' => 'PILOT'
             ),
         ));
     }

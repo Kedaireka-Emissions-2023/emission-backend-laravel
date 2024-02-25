@@ -80,6 +80,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('ports', [PortController::class, 'createPort']);
         Route::put('ports/{id}', [PortController::class, 'updatePort']);
         Route::delete('ports/{id}', [PortController::class, 'deletePort']);
+    });
+
+    Route::middleware('role:BKI,PILOT')->group(function () {
         // Pilot
         Route::get('pilots', [UserController::class, 'getAllPilot']);
     });

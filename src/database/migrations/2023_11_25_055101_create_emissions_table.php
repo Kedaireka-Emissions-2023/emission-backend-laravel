@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('id', true);
             $table->integer('drone_id')->index('fk_drones_has_vessels_drones1_idx');
             $table->integer('vessel_id')->index('fk_drones_has_vessels_vessels1_idx');
+            $table->integer('port_id')->index('fk_drones_has_vessels_ports1_idx');
             $table->string('name')->nullable();
             $table->schemalessAttributes('pilot')->nullable();
             $table->schemalessAttributes('preparation')->nullable();
@@ -25,6 +26,7 @@ return new class extends Migration
             $table->decimal('lkh_th', 10, 5)->nullable()->comment('LKH Threshold');
             $table->decimal('osha_th', 10, 5)->nullable();
             $table->decimal('who_th', 10, 5)->nullable();
+            $table->string('link')->nullable();
             $table->enum('result', ['Success', 'Failed'])->nullable();
             $table->dateTime('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();

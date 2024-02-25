@@ -14,10 +14,11 @@ class EmissionSeeder extends Seeder
 
         DB::table('emissions')->insert(array(
             0 =>
-            array (
+            array(
                 'id' => 1,
                 'drone_id' => 1,
                 'vessel_id' => 1,
+                'port_id' => 1,
                 'name' => 'Emission 1',
                 'levels' => 0.1,
                 'lkh_th' => 0.1,
@@ -27,10 +28,11 @@ class EmissionSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
             ),
             1 =>
-            array (
+            array(
                 'id' => 2,
                 'drone_id' => 1,
                 'vessel_id' => 1,
+                'port_id' => 1,
                 'name' => 'Emission 2',
                 'levels' => 0.2,
                 'lkh_th' => 0.2,
@@ -40,10 +42,11 @@ class EmissionSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
             ),
             2 =>
-            array (
+            array(
                 'id' => 3,
                 'drone_id' => 1,
                 'vessel_id' => 1,
+                'port_id' => 1,
                 'name' => 'Emission 3',
                 'levels' => 0.3,
                 'lkh_th' => 0.3,
@@ -53,10 +56,11 @@ class EmissionSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
             ),
             3 =>
-            array (
+            array(
                 'id' => 4,
                 'drone_id' => 1,
                 'vessel_id' => 1,
+                'port_id' => 1,
                 'name' => 'Emission 4',
                 'levels' => 0.4,
                 'lkh_th' => 0.4,
@@ -66,10 +70,11 @@ class EmissionSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
             ),
             4 =>
-            array (
+            array(
                 'id' => 5,
                 'drone_id' => 1,
                 'vessel_id' => 1,
+                'port_id' => 1,
                 'name' => 'Emission 5',
                 'levels' => 0.5,
                 'lkh_th' => 0.5,

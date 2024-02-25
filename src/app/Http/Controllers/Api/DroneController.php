@@ -131,8 +131,11 @@ class DroneController extends Controller
     {
         $page = $request->query('page');
         $limit = $request->query('limit');
+        $query = $request->query('q');
 
-        $drones = Drone::paginate($limit, ['*'], 'page', $page);
+        $drones = Drone::where('name', 'like', '%' . $query . '%')
+            ->orWhere('serial_number', 'like', '%' . $query . '%')
+            ->paginate($limit, ['*'], 'page', $page);
 
         return response()->json([
             'message' => 'Success',
@@ -171,31 +174,31 @@ class DroneController extends Controller
 
         $drone = new Drone();
 
-        if($request->hasFile('cert_emergency_procedure')){
+        if ($request->hasFile('cert_emergency_procedure')) {
             $temp = $request->file('cert_emergency_procedure');
             $res = $this->uploadImage($temp);
             $drone->cert_emergency_procedure = $res['secure_url'];
         }
 
-        if($request->hasFile('cert_insurance_doc')){
+        if ($request->hasFile('cert_insurance_doc')) {
             $temp = $request->file('cert_insurance_doc');
             $res = $this->uploadImage($temp);
             $drone->cert_insurance_doc = $res['secure_url'];
         }
 
-        if($request->hasFile('cert_equipment_list')){
+        if ($request->hasFile('cert_equipment_list')) {
             $temp = $request->file('cert_equipment_list');
             $res = $this->uploadImage($temp);
             $drone->cert_equipment_list = $res['secure_url'];
         }
 
-        if($request->hasFile('cert_drone_photo')){
+        if ($request->hasFile('cert_drone_photo')) {
             $temp = $request->file('cert_drone_photo');
             $res = $this->uploadImage($temp);
             $drone->cert_drone_photo = $res['secure_url'];
         }
 
-        if($request->hasFile('cert_drone_certificate')){
+        if ($request->hasFile('cert_drone_certificate')) {
             $temp = $request->file('cert_drone_certificate');
             $res = $this->uploadImage($temp);
             $drone->cert_drone_certificate = $res['secure_url'];

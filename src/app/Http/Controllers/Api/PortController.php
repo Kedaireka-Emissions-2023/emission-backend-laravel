@@ -28,8 +28,12 @@ class PortController extends Controller
     {
         $page = $request->query('page');
         $limit = $request->query('limit');
+        $query = $request->query('q');
 
-        $ports = Port::paginate($limit, ['*'], 'page', $page);
+        $ports = Port::where('name', 'like', '%' . $query . '%')
+            ->orWhere('city', 'like', '%' . $query . '%')
+            ->paginate($limit, ['*'], 'page', $page);
+
         return response()->json([
             'message' => 'Success',
             'data' => $ports
@@ -79,7 +83,7 @@ class PortController extends Controller
                 'data' => $e->getMessage()
             ], 400);
         }
-        if($request->hasFile('port_document'))
+        if ($request->hasFile('port_document'))
             $port_document = $this->uploadToDrive($request->file('port_document'));
         else
             $port_document = null;
@@ -105,8 +109,8 @@ class PortController extends Controller
     {
         $port = Port::find($id);
         if ($port) {
-            
-            if($request->hasFile('port_document'))
+
+            if ($request->hasFile('port_document'))
                 $port_document = $this->uploadToDrive($request->file('port_document'));
             else
                 $port_document = null;
