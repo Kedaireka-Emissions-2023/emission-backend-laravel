@@ -41,13 +41,18 @@ class Emission extends Model
         'preparation',
     ];
 
-    public function drones(): BelongsTo
+    public function drone(): BelongsTo
     {
         return $this->belongsTo(Drone::class, 'drone_id', 'id');
     }
 
-    public function vessels(): BelongsTo
+    public function vessel(): BelongsTo
     {
         return $this->belongsTo(Vessel::class, 'vessel_id', 'id');
+    }
+
+    public function port(): BelongsTo
+    {
+        return $this->belongsTo(Port::class, 'port_id', 'id');
     }
 }

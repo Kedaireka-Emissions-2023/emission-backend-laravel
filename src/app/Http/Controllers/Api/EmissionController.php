@@ -24,7 +24,8 @@ class EmissionController extends Controller
 
     public function getEmissionbyId($id)
     {
-        $emission = Emission::find($id);
+        // $emission = Emission::find($id);
+        $emission = Emission::with('drone', 'vessel', 'port')->find($id);
         if ($emission) {
             return response()->json([
                 'message' => 'Success',
