@@ -49,6 +49,29 @@ class EmissionResultController extends Controller
         }
     }
 
+    public function getEmissionResultbyEmissionId(Request $request, $emissionId)
+    {
+        try {
+            $emissionResult = EmissionResult::where('emissions_id', $emissionId)->get();
+
+            if ($emissionResult) {
+                return response()->json([
+                    'message' => 'Success',
+                    'data' => $emissionResult
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'Emission result not found'
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to get emission result',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function createEmissionResult(Request $request)
     {
         try {

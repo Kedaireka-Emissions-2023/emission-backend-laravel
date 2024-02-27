@@ -71,6 +71,8 @@ Route::middleware('auth:sanctum')->group(function () {
         // Emission-Result
         Route::get('emission-results', [EmissionResultController::class, 'getAllEmissionResult']);
         Route::get('emission-results/{id}', [EmissionResultController::class, 'getEmissionResultbyId']);
+        // Get emission result by emission id
+        Route::get('emission-results/emission/{id}', [EmissionResultController::class, 'getEmissionResultbyEmissionId']);
         Route::post('emission-results', [EmissionResultController::class, 'createEmissionResult']);
         Route::post('emission-results/update', [EmissionResultController::class, 'updateEmissionResult']);
         Route::delete('emission-results/{id}', [EmissionResultController::class, 'deleteEmissionResult']);
