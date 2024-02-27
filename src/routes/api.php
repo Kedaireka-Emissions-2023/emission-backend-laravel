@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\VesselController;
 use App\Http\Controllers\Api\DroneController;
 use App\Http\Controllers\Api\PortController;
 use App\Http\Controllers\Api\EmissionController;
+use App\Http\Controllers\Api\EmissionResultController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +67,13 @@ Route::middleware('auth:sanctum')->group(function () {
         // Port
         Route::get('ports', [PortController::class, 'getAll']);
         Route::get('ports/{id}', [PortController::class, 'getPortbyId']);
+
+        // Emission-Result
+        Route::get('emission-results', [EmissionResultController::class, 'getAllEmissionResult']);
+        Route::get('emission-results/{id}', [EmissionResultController::class, 'getEmissionResultbyId']);
+        Route::post('emission-results', [EmissionResultController::class, 'createEmissionResult']);
+        Route::post('emission-results/update', [EmissionResultController::class, 'updateEmissionResult']);
+        Route::delete('emission-results/{id}', [EmissionResultController::class, 'deleteEmissionResult']);
     });
 
     Route::middleware('role:BKI,PORT')->group(function () {

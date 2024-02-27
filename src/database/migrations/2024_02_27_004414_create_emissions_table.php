@@ -19,15 +19,15 @@ return new class extends Migration
             $table->integer('vessel_id')->index('fk_drones_has_vessels_vessels1_idx');
             $table->integer('port_id')->index('fk_drones_has_vessels_ports1_idx');
             $table->string('name')->nullable();
-            $table->schemalessAttributes('pilot')->nullable();
-            $table->schemalessAttributes('preparation')->nullable();
+            $table->json('pilot')->nullable();
+            $table->json('preparation')->nullable();
             $table->date('date')->nullable();
             $table->decimal('levels', 10, 5)->nullable()->comment('Emission percentage (%)');
             $table->decimal('lkh_th', 10, 5)->nullable()->comment('LKH Threshold');
             $table->decimal('osha_th', 10, 5)->nullable();
             $table->decimal('who_th', 10, 5)->nullable();
+            $table->enum('status', ['process', 'low', 'medium', 'high'])->default('process');
             $table->string('link')->nullable();
-            $table->enum('result', ['Success', 'Failed'])->nullable();
             $table->dateTime('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
         });

@@ -43,7 +43,7 @@ class VesselSeeder extends Seeder
             array (
                 'id' => 2,
                 'imo_number' => '1234567',
-                'name' => 'KMP. BUKIT SIGUNTANG',
+                'name' => '[Test] KMP. WAHAI BALERINA MUDA',
                 'type' => 'Ferry',
                 'status' => 'ACTIVE',
                 'dwt' => 1000,
@@ -69,7 +69,7 @@ class VesselSeeder extends Seeder
             array (
                 'id' => 3,
                 'imo_number' => '1234567',
-                'name' => 'KMP. BUKIT SIGUNTANG',
+                'name' => '[TEST] KMP. SEPENUH HATI DAN JIWA',
                 'type' => 'Ferry',
                 'status' => 'ACTIVE',
                 'dwt' => 1000,
@@ -95,7 +95,7 @@ class VesselSeeder extends Seeder
             array (
                 'id' => 4,
                 'imo_number' => '1234567',
-                'name' => 'KMP. BUKIT SIGUNTANG',
+                'name' => '[TEST] KMP. AKU BERHARGA',
                 'type' => 'Ferry',
                 'status' => 'ACTIVE',
                 'dwt' => 1000,

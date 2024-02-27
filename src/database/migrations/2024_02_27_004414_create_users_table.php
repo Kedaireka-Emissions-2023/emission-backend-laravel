@@ -21,16 +21,13 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role', ['PILOT', 'BKI', 'PORT']);
             $table->string('company_name')->nullable();
-            $table->string('phone_number')->nullable()->comment('
-');
+            $table->string('phone_number')->nullable()->comment('\\n');
             $table->string('company_address')->nullable();
             $table->string('nik')->nullable();
             $table->enum('status', ['VALID', 'EXPIRED'])->nullable()->default('EXPIRED');
-
             $table->string('ktp')->nullable();
             $table->string('certificate')->nullable();
             $table->date('exp_certificate')->nullable();
-
             $table->dateTime('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();

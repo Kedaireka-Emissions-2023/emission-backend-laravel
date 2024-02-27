@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('vessels', function (Blueprint $table) {
-            $table->foreign(['port_id'], 'fk_vessels_ports')->references(['id'])->on('ports')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+        Schema::table('result_emissions', function (Blueprint $table) {
+            $table->foreign(['emissions_id'], 'fk_result_emissions_emissions1')->references(['id'])->on('emissions')->onUpdate('NO ACTION')->onDelete('NO ACTION');
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('vessels', function (Blueprint $table) {
-            $table->dropForeign('fk_vessels_ports');
+        Schema::table('result_emissions', function (Blueprint $table) {
+            $table->dropForeign('fk_result_emissions_emissions1');
         });
     }
 };

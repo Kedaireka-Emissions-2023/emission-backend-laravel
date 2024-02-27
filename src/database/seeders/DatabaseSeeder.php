@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(VesselSeeder::class);
         $this->call(DroneSeeder::class);
         $this->call(EmissionSeeder::class);
+        $this->call(EmissionResultSeeder::class);
     }
 }

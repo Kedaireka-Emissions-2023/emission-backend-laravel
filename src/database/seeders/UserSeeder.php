@@ -16,31 +16,31 @@ class UserSeeder extends Seeder
             0 =>
             array(
                 'id' => 1,
-                'full_name' => "Kedaireka BKI",
-                'email' => 'bki@kedaireka.com',
+                'full_name' => "[Test] Kedaireka BKI",
+                'email' => 'bki-test@kedaireka.id',
                 'password' => bcrypt('Password'),
                 'role' => 'BKI'
             ),
             1 =>
             array(
                 'id' => 2,
-                'full_name' => "Kedaireka Pilot",
-                'email' => 'pilot@kedaireka.com',
+                'full_name' => "[Test] Kedaireka Pilot",
+                'email' => 'pilot-test@kedaireka.com',
                 'password' => bcrypt('Password'),
                 'role' => 'PILOT'
             ),
             2 =>
             array(
                 'id' => 3,
-                'full_name' => "Kedaireka PORT",
-                'email' => 'port@kedaireka.com',
+                'full_name' => "[Test] Kedaireka PORT",
+                'email' => 'port-test@kedaireka.com',
                 'password' => bcrypt('Password'),
                 'role' => 'PORT'
             ),
             3 =>
             array(
                 'id' => 4,
-                'full_name' => "Ultraman Pilot",
+                'full_name' => "[Test] Ultraman Pilot",
                 'email' => "ultramanpilot@kedaireka.com",
                 'password' => bcrypt('Password'),
                 'role' => 'PILOT'

@@ -16,8 +16,8 @@ class DroneSeeder extends Seeder
             0 =>
             array (
                 'id' => 1,
-                'name' => 'Drone 1',
-                'serial_number' => 123456789,
+                'name' => '[Test] Drone 1',
+                'serial_number' => 1111111,
                 'weight_no_payload' => 1,
                 'cruise_speed' => 1,
                 'climb_max_rate' => 1,
@@ -42,14 +42,14 @@ class DroneSeeder extends Seeder
                 'cert_drone_photo' => '1',
                 'cert_drone_certificate' => '1',
                 'expiration_date' => '2021-01-01',
-                'created_at' => '2021-01-01 00:00:00',
-                'updated_at' => '2021-01-01 00:00:00',
+                'created_at' => '2024-01-02 00:00:00',
+                'updated_at' => '2024-01-02 00:00:00',
             ),
             1 =>
             array (
                 'id' => 2,
-                'name' => 'Drone 2',
-                'serial_number' => 123456789,
+                'name' => '[Test] Drone 2',
+                'serial_number' => 2222222,
                 'weight_no_payload' => 1,
                 'cruise_speed' => 1,
                 'climb_max_rate' => 1,
@@ -74,14 +74,14 @@ class DroneSeeder extends Seeder
                 'cert_drone_photo' => '1',
                 'cert_drone_certificate' => '1',
                 'expiration_date' => '2021-01-01',
-                'created_at' => '2021-01-01 00:00:00',
-                'updated_at' => '2021-01-01 00:00:00',
+                'created_at' => '2024-01-03 00:00:00',
+                'updated_at' => '2024-01-03 00:00:00',
             ),
             2 =>
             array (
                 'id' => 3,
-                'name' => 'Drone 3',
-                'serial_number' => 123456789,
+                'name' => '[Test] Drone 3',
+                'serial_number' => 3333333,
                 'weight_no_payload' => 1,
                 'cruise_speed' => 1,
                 'climb_max_rate' => 1,
@@ -106,8 +106,8 @@ class DroneSeeder extends Seeder
                 'cert_drone_photo' => '1',
                 'cert_drone_certificate' => '1',
                 'expiration_date' => '2021-01-01',
-                'created_at' => '2021-01-01 00:00:00',
-                'updated_at' => '2021-01-01 00:00:00',
+                'created_at' => '2024-02-04 00:00:00',
+                'updated_at' => '2021-02-04 00:00:00',
             ),
         ));
     }
