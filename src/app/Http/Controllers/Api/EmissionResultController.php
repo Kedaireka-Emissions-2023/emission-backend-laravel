@@ -52,7 +52,10 @@ class EmissionResultController extends Controller
     public function getEmissionResultbyEmissionId(Request $request, $emissionId)
     {
         try {
-            $emissionResult = EmissionResult::where('emissions_id', $emissionId)->get();
+            $page = $request->query('page');
+            $limit = $request->query('limit');
+
+            $emissionResult = EmissionResult::where('emissions_id', $emissionId)->paginate($limit, ['*'], 'page', $page);
 
             if ($emissionResult) {
                 return response()->json([

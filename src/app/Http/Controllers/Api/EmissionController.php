@@ -14,7 +14,7 @@ class EmissionController extends Controller
         $page = $request->query('page');
         $limit = $request->query('limit');
 
-        $emissions = Emission::paginate($limit, ['*'], 'page', $page);
+        $emissions = Emission::with(['drone', 'vessel', 'port'])->paginate($limit, ['*'], 'page', $page);
 
         return response()->json([
             'message' => 'Success',
