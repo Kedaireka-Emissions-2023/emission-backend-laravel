@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\EmissionResult;
+use Illuminate\Support\Facades\Storage;
 
 class EmissionResultController extends Controller
 {
@@ -75,23 +76,62 @@ class EmissionResultController extends Controller
         }
     }
 
+    public function download($path)
+    {
+        if (Storage::exists('public/' . $path)) {
+            $fileContent = Storage::get('public/' . $path);
+
+            $response = response($fileContent, 200)
+                ->header('Content-Type', 'application/octet-stream')
+                ->header('Content-Disposition', 'attachment; filename="' . $path . '"');
+
+            return $response;
+        } else {
+            return response()->json([
+                'message' => 'Emission checking file not found',
+                'data' => null
+            ], 404);
+        }
+    }
+
     public function createEmissionResult(Request $request)
     {
         try {
-            $emissionResult = new EmissionResult();
-            $emissionResult->emissions_id = $request->emissions_id;
-            $emissionResult->result = $request->result;
-            $emissionResult->failure_mode = $request->failure_mode;
-            $emissionResult->effect = $request->effect;
-            $emissionResult->cause = $request->cause;
-            $emissionResult->possible_action = $request->possible_action;
-            $emissionResult->ref_protocol = $request->ref_protocol;
-            $emissionResult->save();
+            if($request->result == "Failed"){
+                $emissionResult = new EmissionResult();
+                $emissionResult->emissions_id = $request->emissions_id;
+                $emissionResult->result = $request->result;
+                $emissionResult->failure_mode = $request->failure_mode;
+                $emissionResult->effect = $request->effect;
+                $emissionResult->cause = $request->cause;
+                $emissionResult->possible_action = $request->possible_action;
+                $emissionResult->ref_protocol = $request->ref_protocol;
+                $emissionResult->save();
 
-            return response()->json([
-                'message' => 'Emission result created',
-                'data' => $emissionResult
-            ], 201);
+                return response()->json([
+                    'message' => 'Emission result created (Failed Verdict)',
+                    'data' => $emissionResult
+                ], 201);
+            }else if ($request->result == "Success"){
+                $emissionResult = new EmissionResult();
+                $emissionResult->emissions_id = $request->emissions_id;
+                $emissionResult->result = $request->result;
+                $emissionResult->emission_checking_file = $request->file('emission_checking_file')->store('emission-checking-file', 'public');
+                $emissionResult->drone_video_path_file = $request->file('drone_video_path_file')->store('drone-video-path-file', 'public');
+                $emissionResult->drone_video_camera_file = $request->file('drone_video_camera_file')->store('drone-video-camera-file', 'public');
+                $emissionResult->save();
+
+                return response()->json([
+                    'message' => 'Emission result created (Success Verdict)',
+                    'data' => $emissionResult
+                ], 201);
+            }else{
+                return response()->json([
+                    'message' => 'Emission result not created',
+                    'error' => 'Invalid result'
+                ], 400);
+            }
+
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Failed to create emission result',
@@ -106,7 +146,6 @@ class EmissionResultController extends Controller
             $emissionResult = EmissionResult::find($request->id);
 
             if ($emissionResult) {
-                // Only update the field that is present in the request
                 $emissionResult->emissions_id = $request->emissions_id ?? $emissionResult->emissions_id;
                 $emissionResult->result = $request->result ?? $emissionResult->result;
                 $emissionResult->failure_mode = $request->failure_mode ?? $emissionResult->failure_mode;

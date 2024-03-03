@@ -22,6 +22,9 @@ return new class extends Migration
             $table->text('cause')->nullable();
             $table->text('possible_action')->nullable();
             $table->text('ref_protocol')->nullable();
+            $table->text('emission_checking_file')->nullable();
+            $table->text('drone_video_path_file')->nullable();
+            $table->text('drone_video_camera_file')->nullable();
         });
     }
 

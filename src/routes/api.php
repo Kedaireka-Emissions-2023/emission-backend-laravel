@@ -44,6 +44,10 @@ Route::get('drones/{id}/cert/dc', [DroneController::class, 'get_cert_drone_certi
 // Port Document
 Route::get('ports/{id}/doc', [PortController::class, 'get_port_document']);
 
+// Download Result Emission Document
+Route::get('emission-results/download/{path}', [EmissionResultController::class, 'download'])
+    ->where('path', '.*');
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile', [UserController::class, 'profile']);
     Route::post('users/update', [UserController::class, 'update']);

@@ -20,6 +20,9 @@ class EmissionResult extends Model
         'cause',
         'possible_action',
         'ref_protocol',
+        'emission_checking_file',
+        'drone_video_path_file',
+        'drone_video_camera_file'
     ];
 
     // Disable created_at and updated_at
