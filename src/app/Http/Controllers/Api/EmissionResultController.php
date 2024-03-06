@@ -116,9 +116,15 @@ class EmissionResultController extends Controller
                 $emissionResult = new EmissionResult();
                 $emissionResult->emissions_id = $request->emissions_id;
                 $emissionResult->result = $request->result;
-                $emissionResult->emission_checking_file = $request->file('emission_checking_file')->store('emission-checking-file', 'public');
-                $emissionResult->drone_video_path_file = $request->file('drone_video_path_file')->store('drone-video-path-file', 'public');
-                $emissionResult->drone_video_camera_file = $request->file('drone_video_camera_file')->store('drone-video-camera-file', 'public');
+                if ($request->hasFile('emission_checking_file')) {
+                    $emissionResult->emission_checking_file = $request->file('emission_checking_file')->store('emission-checking-file', 'public');
+                }
+                if ($request->hasFile('drone_video_path_file')) {
+                    $emissionResult->drone_video_path_file = $request->file('drone_video_path_file')->store('drone-video-path-file', 'public');
+                }
+                if ($request->hasFile('drone_video_camera_file')) {
+                    $emissionResult->drone_video_camera_file = $request->file('drone_video_camera_file')->store('drone-video-camera-file', 'public');
+                }
                 $emissionResult->save();
 
                 return response()->json([
