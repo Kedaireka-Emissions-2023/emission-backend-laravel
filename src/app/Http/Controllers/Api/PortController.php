@@ -20,7 +20,6 @@ class PortController extends Controller
 
         Gdrive::put($imageUrl, $image);
 
-        //delete storage
         Storage::delete($path);
         return $path;
     }
@@ -73,54 +72,29 @@ class PortController extends Controller
 
     public function createPort(Request $request)
     {
-        try {
-            $request->validate([
-                'name' => 'required',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error',
-                'data' => $e->getMessage()
-            ], 400);
-        }
-        if ($request->hasFile('port_document'))
-            $port_document = $this->uploadToDrive($request->file('port_document'));
-        else
-            $port_document = null;
-
-        $port = new Port();
-        $port->name = $request->name;
-        $port->operator_address = $request->operator_address;
-        $port->office_address = $request->office_address;
-        $port->city = $request->city;
-        $port->phone_number = $request->phone_number;
-        $port->port_document = $port_document;
-        $port->longitude = $request->longitude;
-        $port->latitude = $request->latitude;
-        $port->save();
-
-        return response()->json([
-            'message' => 'Success',
-            'data' => $port
-        ], 201);
-    }
-
-    public function updatePort(Request $request, $id)
-    {
-        $port = Port::find($id);
-        if ($port) {
+        try{
+            try {
+                $request->validate([
+                    'name' => 'required',
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => 'Error',
+                    'data' => $e->getMessage()
+                ], 400);
+            }
+            $port = new Port();
 
             if ($request->hasFile('port_document'))
-                $port_document = $this->uploadToDrive($request->file('port_document'));
+                $port->port_document = $request->file('port_document')->store('port-document', 'public');
             else
-                $port_document = null;
+                $port->port_document = null;
 
             $port->name = $request->name;
             $port->operator_address = $request->operator_address;
             $port->office_address = $request->office_address;
             $port->city = $request->city;
             $port->phone_number = $request->phone_number;
-            $port->port_document = $port_document;
             $port->longitude = $request->longitude;
             $port->latitude = $request->latitude;
             $port->save();
@@ -128,7 +102,42 @@ class PortController extends Controller
             return response()->json([
                 'message' => 'Success',
                 'data' => $port
-            ], 200);
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to create port',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function updatePort(Request $request, $id)
+    {
+        $port = Port::find($id);
+        if ($port) {
+            try{
+                if ($request->hasFile('port_document'))
+                    $port->port_document = $request->file('port_document')->store('port-document', 'public');
+
+                $port->name = $request->name;
+                $port->operator_address = $request->operator_address;
+                $port->office_address = $request->office_address;
+                $port->city = $request->city;
+                $port->phone_number = $request->phone_number;
+                $port->longitude = $request->longitude;
+                $port->latitude = $request->latitude;
+                $port->save();
+
+                return response()->json([
+                    'message' => 'Success',
+                    'data' => $port
+                ], 200);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => 'Failed to update port',
+                    'error' => $e->getMessage()
+                ], 500);
+            }
         } else {
             return response()->json([
                 'message' => 'Port not found',

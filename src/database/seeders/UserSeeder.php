@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
             array(
                 'id' => 2,
                 'full_name' => "[Test] Kedaireka Pilot",
-                'email' => 'pilot-test@kedaireka.com',
+                'email' => 'pilot-test@kedaireka.id',
                 'password' => bcrypt('Password'),
                 'role' => 'PILOT'
             ),
@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
             array(
                 'id' => 3,
                 'full_name' => "[Test] Kedaireka PORT",
-                'email' => 'port-test@kedaireka.com',
+                'email' => 'port-test@kedaireka.id',
                 'password' => bcrypt('Password'),
                 'role' => 'PORT'
             ),

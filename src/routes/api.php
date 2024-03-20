@@ -12,17 +12,6 @@ use App\Http\Controllers\Api\PortController;
 use App\Http\Controllers\Api\EmissionController;
 use App\Http\Controllers\Api\EmissionResultController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-
 Route::get('', function () {
     return new JsonResponse([
         'message' => 'Hello from production api : ok!'
@@ -75,7 +64,6 @@ Route::middleware('auth:sanctum')->group(function () {
         // Emission-Result
         Route::get('emission-results', [EmissionResultController::class, 'getAllEmissionResult']);
         Route::get('emission-results/{id}', [EmissionResultController::class, 'getEmissionResultbyId']);
-        // Get emission result by emission id
         Route::get('emission-results/emission/{emissionId}', [EmissionResultController::class, 'getEmissionResultbyEmissionId']);
         Route::post('emission-results', [EmissionResultController::class, 'createEmissionResult']);
         Route::post('emission-results/update', [EmissionResultController::class, 'updateEmissionResult']);
