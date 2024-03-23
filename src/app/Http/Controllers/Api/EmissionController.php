@@ -16,7 +16,6 @@ class EmissionController extends Controller
 
         $emissions = Emission::with(['drone', 'vessel', 'port'])->paginate($limit, ['*'], 'page', $page);
 
-        // Get date from emission with format like "13 September 2021"
         foreach ($emissions as $emission) {
             $emission->date = date('d F Y', strtotime($emission->date));
         }
@@ -29,10 +28,8 @@ class EmissionController extends Controller
 
     public function getEmissionbyId($id)
     {
-        // $emission = Emission::find($id);
         $emission = Emission::with('drone', 'vessel', 'port')->find($id);
         if ($emission) {
-            // Get date from emission with format like "13 September 2021"
             $emission->date = date('d F Y', strtotime($emission->date));
             return response()->json([
                 'message' => 'Success',
@@ -54,7 +51,6 @@ class EmissionController extends Controller
                 'vessel_id' => 'required|integer',
                 'port_id' => 'required|integer',
                 'link' => 'required|string',
-                // 'name' => 'required|string',
                 'date' => 'required',
             ]);
 

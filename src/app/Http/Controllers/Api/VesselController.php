@@ -16,7 +16,6 @@ class VesselController extends Controller
         $limit = $request->query('limit');
         $query = $request->query('q');
 
-        // $vessels = Vessel::paginate($limit, ['*'], 'page', $page);
         $vessels = Vessel::where('name', 'like', '%' . $query . '%')
             ->orWhere('imo_number', 'like', '%' . $query . '%')
             ->orWhere('type', 'like', '%' . $query . '%')
@@ -40,6 +39,26 @@ class VesselController extends Controller
                 'message' => 'Vessel not found',
                 'data' => null
             ], 404);
+        }
+    }
+
+    public function getTotalVessel()
+    {
+        try {
+            $total = Vessel::count();
+            $vesselWithEmission = Vessel::whereHas('emissions')->count();
+            return response()->json([
+                'message' => 'Success',
+                'data' => [
+                    'Vessel' => $total,
+                    'Vessel with emission' => $vesselWithEmission
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error getting total vessel',
+                'data' => $e->getMessage()
+            ], 400);
         }
     }
 

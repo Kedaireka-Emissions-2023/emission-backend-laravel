@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
-use App\Models\EmissionResult;
 use Illuminate\Support\Facades\Storage;
+
+use App\Models\EmissionResult;
 
 class EmissionResultController extends Controller
 {
     public function getAllEmissionResult(Request $request)
     {
-        // Use try catch to catch any exception
         try {
             $emissionResult = EmissionResult::all();
 
