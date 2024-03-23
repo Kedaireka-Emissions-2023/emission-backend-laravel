@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('imo_number')->nullable();
             $table->string('name');
             $table->string('type')->nullable();
-            $table->enum('status', ['ACTIVE', 'ON-HOLD', 'UNACTIVE'])->nullable();
             $table->integer('dwt')->nullable();
             $table->integer('gt')->nullable();
             $table->string('voyage_route_from')->nullable();
@@ -34,6 +33,7 @@ return new class extends Migration
             $table->integer('aux_power')->nullable()->comment('Auxiliary Power (Kw)');
             $table->string('main_eng_fuel')->nullable();
             $table->string('aux_eng_fuel')->nullable();
+            $table->enum('status', ['ACTIVE', 'ON-HOLD', 'UNACTIVE'])->nullable();
             $table->dateTime('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
             $table->integer('port_id')->nullable()->index('fk_vessels_port_idx');

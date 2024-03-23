@@ -7,126 +7,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-use Yaza\LaravelGoogleDriveStorage\Gdrive;
-
-use Cloudinary\Configuration\Configuration;
-use Cloudinary\Api\Upload\UploadApi;
-
 use App\Models\Drone;
 
 class DroneController extends Controller
 {
-    private function uploadImage($image)
-    {
-        $path = $image->store('public/images');
-        $imageUrl = Storage::path($path);
-
-        $my_key = env('CLOUDINARY_API_KEY');
-        $my_secret = env('CLOUDINARY_API_SECRET');
-        $my_cloud = env('CLOUDINARY_CLOUD_NAME');
-        Configuration::instance([
-            'cloud' => [
-                'cloud_name' => $my_cloud,
-                'api_key' => $my_key,
-                'api_secret' => $my_secret
-            ]
-        ]);
-
-        $uploadApi = new UploadApi();
-        $result = $uploadApi->upload($imageUrl, ['resource_type' => 'auto']);
-
-        //delete storage
-        Storage::delete($path);
-        return $result;
-    }
-
-    private function uploadToDrive($image)
-    {
-        $path = $image->store('public/images');
-        $imageUrl = Storage::path($path);
-
-        Gdrive::put($imageUrl, $image);
-
-        //delete storage
-        Storage::delete($path);
-        return $path;
-    }
-
-    public function get_cert_insurance($id)
-    {
-        $drone = Drone::find($id);
-        if ($drone) {
-            $filePath = "/app/storage/app/" . $drone->cert_insurance_doc;
-            $data = Gdrive::get($filePath);
-            return response($data->file, 200)->header('Content-Type', $data->ext);
-        } else {
-            return response()->json([
-                'message' => 'Drone not found',
-                'data' => null
-            ], 404);
-        }
-    }
-
-    public function get_cert_emergency_procedure($id)
-    {
-        $drone = Drone::find($id);
-        if ($drone) {
-            $filePath = "/app/storage/app/" . $drone->cert_emergency_procedure;
-            $data = Gdrive::get($filePath);
-            return response($data->file, 200)->header('Content-Type', $data->ext);
-        } else {
-            return response()->json([
-                'message' => 'Drone not found',
-                'data' => null
-            ], 404);
-        }
-    }
-
-    public function get_cert_equipment_list($id)
-    {
-        $drone = Drone::find($id);
-        if ($drone) {
-            $filePath = "/app/storage/app/" . $drone->cert_equipment_list;
-            $data = Gdrive::get($filePath);
-            return response($data->file, 200)->header('Content-Type', $data->ext);
-        } else {
-            return response()->json([
-                'message' => 'Drone not found',
-                'data' => null
-            ], 404);
-        }
-    }
-
-    public function get_cert_drone_photo($id)
-    {
-        $drone = Drone::find($id);
-        if ($drone) {
-            $filePath = "/app/storage/app/" . $drone->cert_drone_photo;
-            $data = Gdrive::get($filePath);
-            return response($data->file, 200)->header('Content-Type', $data->ext);
-        } else {
-            return response()->json([
-                'message' => 'Drone not found',
-                'data' => null
-            ], 404);
-        }
-    }
-
-    public function get_cert_drone_certificate($id)
-    {
-        $drone = Drone::find($id);
-        if ($drone) {
-            $filePath = "/app/storage/app/" . $drone->cert_drone_certificate;
-            $data = Gdrive::get($filePath);
-            return response($data->file, 200)->header('Content-Type', $data->ext);
-        } else {
-            return response()->json([
-                'message' => 'Drone not found',
-                'data' => null
-            ], 404);
-        }
-    }
-
     public function getAll(Request $request)
     {
         $page = $request->query('page');
@@ -159,6 +43,19 @@ class DroneController extends Controller
         }
     }
 
+    public function getTotalDrone()
+    {
+        $total = Drone::count();
+        $totalEmission = Drone::whereHas('emissions')->count();
+        return response()->json([
+            'message' => 'Success',
+            'data' => [
+                'Drone' => $total,
+                'Drones with emission' => $totalEmission
+            ]
+        ], 200);
+    }
+
     public function createDrone(Request $request)
     {
         try {
@@ -175,33 +72,23 @@ class DroneController extends Controller
         $drone = new Drone();
 
         if ($request->hasFile('cert_emergency_procedure')) {
-            $temp = $request->file('cert_emergency_procedure');
-            $res = $this->uploadImage($temp);
-            $drone->cert_emergency_procedure = $res['secure_url'];
+            $drone->cert_emergency_procedure = $request->file('cert_emergency_procedure')->store('cert_emergency_procedure', 'public');
         }
 
         if ($request->hasFile('cert_insurance_doc')) {
-            $temp = $request->file('cert_insurance_doc');
-            $res = $this->uploadImage($temp);
-            $drone->cert_insurance_doc = $res['secure_url'];
+            $drone->cert_insurance_doc = $request->file('cert_insurance_doc')->store('cert_insurance_doc', 'public');
         }
 
         if ($request->hasFile('cert_equipment_list')) {
-            $temp = $request->file('cert_equipment_list');
-            $res = $this->uploadImage($temp);
-            $drone->cert_equipment_list = $res['secure_url'];
+            $drone->cert_equipment_list = $request->file('cert_equipment_list')->store('cert_equipment_list', 'public');
         }
 
         if ($request->hasFile('cert_drone_photo')) {
-            $temp = $request->file('cert_drone_photo');
-            $res = $this->uploadImage($temp);
-            $drone->cert_drone_photo = $res['secure_url'];
+            $drone->cert_drone_photo = $request->file('cert_drone_photo')->store('cert_drone_photo', 'public');
         }
 
         if ($request->hasFile('cert_drone_certificate')) {
-            $temp = $request->file('cert_drone_certificate');
-            $res = $this->uploadImage($temp);
-            $drone->cert_drone_certificate = $res['secure_url'];
+            $drone->cert_drone_certificate = $request->file('cert_drone_certificate')->store('cert_drone_certificate', 'public');
         }
 
         $drone->name = $request->name;
@@ -233,18 +120,58 @@ class DroneController extends Controller
         ], 201);
     }
 
-    public function updateDrone(Request $request, $id)
+    public function updateDrone(Request $request)
     {
-        $drone = Drone::find($id);
+        $drone = Drone::find($request->$id);
         if ($drone) {
-            $drone->update($request->all());
+            $drone->name = $request->name ?? $drone->name;
+            $drone->serial_number = $request->serial_number ?? $drone->serial_number;
+            $drone->weight_no_payload = $request->weight_no_payload ?? $drone->weight_no_payload;
+            $drone->cruise_speed = $request->cruise_speed ?? $drone->cruise_speed;
+            $drone->climb_max_rate = $request->climb_max_rate ?? $drone->climb_max_rate;
+            $drone->volume_payload_size = $request->volume_payload_size ?? $drone->volume_payload_size;
+            $drone->wing_material = $request->wing_material ?? $drone->wing_material;
+            $drone->fuselage_material = $request->fuselage_material ?? $drone->fuselage_material;
+            $drone->filesave_system = $request->filesave_system ?? $drone->filesave_system;
+            $drone->control_system = $request->control_system ?? $drone->control_system;
+            $drone->max_takeoff_weight = $request->max_takeoff_weight ?? $drone->max_takeoff_weight;
+            $drone->max_flight_range = $request->max_flight_range ?? $drone->max_flight_range;
+            $drone->max_speed = $request->max_speed ?? $drone->max_speed;
+            $drone->max_cruise_height = $request->max_cruise_height ?? $drone->max_cruise_height;
+            $drone->operational_payload_weight = $request->operational_payload_weight ?? $drone->operational_payload_weight;
+            $drone->proximity_sensor = $request->proximity_sensor ?? $drone->proximity_sensor;
+            $drone->precision_landinig_mechanism = $request->precision_landinig_mechanism ?? $drone->precision_landinig_mechanism;
+            $drone->operation_system = $request->operation_system ?? $drone->operation_system;
+            $drone->communication_system = $request->communication_system ?? $drone->communication_system;
+            $drone->description = $request->description ?? $drone->description;
+            if($request->hasFile('cert_emergency_procedure')){
+                Storage::delete($drone->cert_emergency_procedure);
+                $drone->cert_emergency_procedure = $request->file('cert_emergency_procedure')->store('cert_emergency_procedure', 'public');
+            }
+            if($request->hasFile('cert_insurance_doc')){
+                Storage::delete($drone->cert_insurance_doc);
+                $drone->cert_insurance_doc = $request->file('cert_insurance_doc')->store('cert_insurance_doc', 'public');
+            }
+            if($request->hasFile('cert_equipment_list')){
+                Storage::delete($drone->cert_equipment_list);
+                $drone->cert_equipment_list = $request->file('cert_equipment_list')->store('cert_equipment_list', 'public');
+            }
+            if($request->hasFile('cert_drone_photo')){
+                Storage::delete($drone->cert_drone_photo);
+                $drone->cert_drone_photo = $request->file('cert_drone_photo')->store('cert_drone_photo', 'public');
+            }
+            if($request->hasFile('cert_drone_certificate')){
+                Storage::delete($drone->cert_drone_certificate);
+                $drone->cert_drone_certificate = $request->file('cert_drone_certificate')->store('cert_drone_certificate', 'public');
+            }
+            $drone->expiration_date = $request->expiration_date ?? $drone->expiration_date;
             return response()->json([
-                'message' => 'Success',
+                'message' => 'Drone updated!',
                 'data' => $drone
             ], 200);
         } else {
             return response()->json([
-                'message' => 'Drone not found',
+                'message' => 'Drone not found!',
                 'data' => null
             ], 404);
         }

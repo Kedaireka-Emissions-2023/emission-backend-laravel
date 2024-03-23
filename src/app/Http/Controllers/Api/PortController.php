@@ -7,22 +7,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-use Yaza\LaravelGoogleDriveStorage\Gdrive;
-
 use App\Models\Port;
 
 class PortController extends Controller
 {
-    private function uploadToDrive($image)
-    {
-        $path = $image->store('public/images');
-        $imageUrl = Storage::path($path);
-
-        Gdrive::put($imageUrl, $image);
-
-        Storage::delete($path);
-        return $path;
-    }
     public function getAll(Request $request)
     {
         $page = $request->query('page');
@@ -47,21 +35,6 @@ class PortController extends Controller
                 'message' => 'Success',
                 'data' => $port
             ], 200);
-        } else {
-            return response()->json([
-                'message' => 'Port not found',
-                'data' => null
-            ], 404);
-        }
-    }
-
-    public function get_port_document($id)
-    {
-        $port = Port::find($id);
-        if ($port) {
-            $filePath = "/app/storage/app/" . $port->port_document;
-            $data = Gdrive::get($filePath);
-            return response($data->file, 200)->header('Content-Type', $data->ext);
         } else {
             return response()->json([
                 'message' => 'Port not found',

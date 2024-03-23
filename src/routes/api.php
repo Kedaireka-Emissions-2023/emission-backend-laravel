@@ -23,18 +23,11 @@ Route::prefix('auth')->group(function () {
     Route::post('login', [UserController::class, 'login']);
 });
 
-// Drone Certificate
-Route::get('drones/{id}/cert/ins', [DroneController::class, 'get_cert_insurance']);
-Route::get('drones/{id}/cert/ep', [DroneController::class, 'get_cert_emergency_procedure']);
-Route::get('drones/{id}/cert/el', [DroneController::class, 'get_cert_equipment_list']);
-Route::get('drones/{id}/cert/dp', [DroneController::class, 'get_cert_drone_photo']);
-Route::get('drones/{id}/cert/dc', [DroneController::class, 'get_cert_drone_certificate']);
-
 // Port Document
 Route::get('ports/{id}/doc', [PortController::class, 'get_port_document']);
 
-// Download Result Emission Document
-Route::get('emission-results/download/{path}', [EmissionResultController::class, 'download'])
+// Download Document
+Route::get('download/{path}', [EmissionResultController::class, 'download'])
     ->where('path', '.*');
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -45,12 +38,14 @@ Route::middleware('auth:sanctum')->group(function () {
         // Vessel
         Route::get('vessels', [VesselController::class, 'getAll']);
         Route::get('vessels/{id}', [VesselController::class, 'getVesselbyId']);
+        Route::get('vessels/s/total', [VesselController::class, 'getTotalVessel']);
 
         // Drone
         Route::get('drones', [DroneController::class, 'getAll']);
         Route::get('drones/{id}', [DroneController::class, 'getDronebyId']);
+        Route::get('drones/s/total', [DroneController::class, 'getTotalDrone']);
         Route::post('drones', [DroneController::class, 'createDrone']);
-        Route::put('drones/{id}', [DroneController::class, 'updateDrone']);
+        Route::post('drones/update', [DroneController::class, 'updateDrone']);
         Route::delete('drones/{id}', [DroneController::class, 'deleteDrone']);
 
         // Emission
@@ -89,7 +84,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('pilots', [UserController::class, 'getAllPilot']);
     });
 
-    Route::middleware('role:PILOT')->group(function () {
+    Route::middleware('role:PILOT,PORT')->group(function () {
         // Emission
         Route::post('emissions', [EmissionController::class, 'createEmission']);
         Route::post('update/emissions', [EmissionController::class, 'updateEmission']);

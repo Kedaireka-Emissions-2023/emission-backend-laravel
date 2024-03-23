@@ -25,7 +25,6 @@ class EmissionResult extends Model
         'drone_video_camera_file'
     ];
 
-    // Disable created_at and updated_at
     public $timestamps = false;
 
     public function emission(): BelongsTo

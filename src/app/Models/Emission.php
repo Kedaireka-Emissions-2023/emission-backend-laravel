@@ -21,6 +21,7 @@ class Emission extends Model
         'pilot',
         'preparation',
         'date',
+        'time',
         'result',
         'levels',
         'lkh_th',
