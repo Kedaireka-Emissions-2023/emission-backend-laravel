@@ -11,6 +11,7 @@ class Port extends Model
     use HasFactory;
     protected $fillable = [
         'id',
+        'port_id',
         'name',
         'operator_address',
         'office_address',
@@ -22,9 +23,4 @@ class Port extends Model
         'created_at',
         'updated_at',
     ];
-
-    public function vessels(): HasMany
-    {
-        return $this->hasMany(Vessel::class, 'port_id', 'id');
-    }
 }

@@ -14,15 +14,16 @@ class Emission extends Model
     use HasFactory, SchemalessAttributesTrait;
     protected $fillable = [
         'id',
+        'checking_id',
         'drone_id',
         'vessel_id',
         'port_id',
-        'name',
+        'checking_id',
         'pilot',
         'preparation',
         'date',
         'time',
-        'result',
+        'status',
         'levels',
         'lkh_th',
         'osha_th',

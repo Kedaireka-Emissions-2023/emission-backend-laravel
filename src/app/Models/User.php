@@ -25,6 +25,7 @@ class User extends Authenticatable
         'email_recovery',
         'password',
         'role',
+
         'company_name',
         'phone_number',
         'company_address',

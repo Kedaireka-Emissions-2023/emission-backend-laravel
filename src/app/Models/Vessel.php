@@ -12,9 +12,11 @@ class Vessel extends Model
     use HasFactory;
     protected $fillable = [
         'id',
+        'serial_number',
         'imo_number',
         'name',
         'type',
+        'status',
         'dwt',
         'gt',
         'voyage_route_from',
@@ -32,7 +34,6 @@ class Vessel extends Model
         'aux_eng_fuel',
         'main_eng',
         'aux_eng',
-        'status',
         'created_at',
         'updated_at',
         'port_id',
@@ -41,10 +42,5 @@ class Vessel extends Model
     public function emissions(): HasMany
     {
         return $this->hasMany(Emission::class, 'vessel_id', 'id');
-    }
-
-    public function port(): BelongsTo
-    {
-        return $this->belongsTo(Port::class, 'port_id', 'id');
     }
 }

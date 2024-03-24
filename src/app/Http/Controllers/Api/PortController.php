@@ -84,9 +84,9 @@ class PortController extends Controller
         }
     }
 
-    public function updatePort(Request $request, $id)
+    public function updatePort(Request $request)
     {
-        $port = Port::find($id);
+        $port = Port::find($request->id);
         if ($port) {
             try{
                 if ($request->hasFile('port_document'))

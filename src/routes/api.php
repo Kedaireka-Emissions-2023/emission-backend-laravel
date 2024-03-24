@@ -75,7 +75,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:BKI')->group(function () {
         // Port
         Route::post('ports', [PortController::class, 'createPort']);
-        Route::put('ports/{id}', [PortController::class, 'updatePort']);
+        Route::post('ports/update', [PortController::class, 'updatePort']);
         Route::delete('ports/{id}', [PortController::class, 'deletePort']);
     });
 
