@@ -13,7 +13,6 @@ class UserSeeder extends Seeder
     {
         DB::transaction(function () {
             User::firstOrCreate(['email' => 'bki-test@kedaireka.id'], [
-                'id' => 1,
                 'full_name' => "[Test] Kedaireka BKI",
                 'email' => 'bki-test@kedaireka.id',
                 'password' => bcrypt('Password'),
@@ -24,7 +23,6 @@ class UserSeeder extends Seeder
             ]);
 
             User::firstOrCreate(['email' => 'pilot-test@kedaireka.id'], [
-                'id' => 2,
                 'full_name' => "[Test] Kedaireka Pilot",
                 'email' => 'pilot-test@kedaireka.id',
                 'password' => bcrypt('Password'),
@@ -35,7 +33,6 @@ class UserSeeder extends Seeder
             ]);
 
             User::firstOrCreate(['email' => 'port-test@kedaireka.id'], [
-                'id' => 3,
                 'full_name' => "[Test] Kedaireka PORT",
                 'email' => 'port-test@kedaireka.id',
                 'password' => bcrypt('Password'),
@@ -46,7 +43,6 @@ class UserSeeder extends Seeder
             ]);
 
             User::firstOrCreate(['email' => 'ultramanpilot@kedaireka.id'], [
-                'id' => 4,
                 'full_name' => "[Test] Ultraman Pilot",
                 'email' => "ultramanpilot@kedaireka.id",
                 'nik' => null,
@@ -57,7 +53,6 @@ class UserSeeder extends Seeder
             ]);
 
             User::firstOrCreate(['email' => 'madewijaya@kedaireka.id'], [
-                'id' => 5,
                 'full_name' => 'Made Wijaya',
                 'email' => 'madewijaya@kedaireka.id',
                 'nik' => '1089053116912560',
@@ -68,7 +63,6 @@ class UserSeeder extends Seeder
             ]);
 
             User::firstOrCreate(['email' => 'daraasri@kedaireka.id'], [
-                'id' => 6,
                 'full_name' => 'Dara Asri',
                 'email' => 'daraasri@kedaireka.id',
                 'nik' => '1667159185301370',
@@ -79,7 +73,6 @@ class UserSeeder extends Seeder
             ]);
 
             User::firstOrCreate(['email' => 'fabianmalik@kedaireka.id'], [
-                'id' => 7,
                 'full_name' => 'Fabian Malik',
                 'email' => 'fabianmalik@kedaireka.id',
                 'nik' => '3384794731624510',
@@ -90,7 +83,6 @@ class UserSeeder extends Seeder
             ]);
 
             User::firstOrCreate(['email' => 'melatisari@kedaireka.id'], [
-                'id' => 8,
                 'full_name' => 'Melati Sari',
                 'email' => 'melatisari@kedaireka.id',
                 'nik' => '3651396572274800',
@@ -101,7 +93,6 @@ class UserSeeder extends Seeder
             ]);
 
             User::firstOrCreate(['email' => 'bayuangkasa@kedaireka.id'], [
-                'id' => 9,
                 'full_name' => 'Bayu Angkasa',
                 'email' => 'bayuangkasa@kedaireka.id',
                 'nik' => '5014694142225540',
@@ -112,7 +103,6 @@ class UserSeeder extends Seeder
             ]);
 
             User::firstOrCreate(['email' => 'nirmaladewi@kedaireka.id'], [
-                'id' => 10,
                 'full_name' => 'Nirmala Dewi',
                 'email' => 'nirmaladewi@kedaireka.id',
                 'nik' => '5783493753319130',
@@ -123,7 +113,6 @@ class UserSeeder extends Seeder
             ]);
 
             User::firstOrCreate(['email' => 'satriapamungkas@kedaireka.id'], [
-                'id' => 11,
                 'full_name' => 'Satria Pamungkas',
                 'email' => 'satriapamungkas@kedaireka.id',
                 'nik' => '6929686065020820',
@@ -134,7 +123,6 @@ class UserSeeder extends Seeder
             ]);
 
             User::firstOrCreate(['email' => 'ayusekar@kedaireka.id'], [
-                'id' => 12,
                 'full_name' => 'Ayu Sekar',
                 'email' => 'ayusekar@kedaireka.id',
                 'nik' => '8350515650815360',
@@ -145,7 +133,6 @@ class UserSeeder extends Seeder
             ]);
 
             User::firstOrCreate(['email' => 'renoprasetya@kedaireka.id'], [
-                'id' => 13,
                 'full_name' => 'Reno Prasetya',
                 'email' => 'renoprasetya@kedaireka.id',
                 'nik' => '8419750578251200',
@@ -156,7 +143,6 @@ class UserSeeder extends Seeder
             ]);
 
             User::firstOrCreate(['email' => 'megaputra@kedaireka.id'], [
-                'id' => 14,
                 'full_name' => 'Mega Putra',
                 'email' => 'megaputra@kedaireka.id',
                 'nik' => '8738043136242860',
