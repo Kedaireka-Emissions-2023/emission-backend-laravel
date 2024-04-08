@@ -36,7 +36,6 @@ class Vessel extends Model
         'aux_eng',
         'created_at',
         'updated_at',
-        'port_id',
     ];
 
     public function emissions(): HasMany

@@ -122,7 +122,7 @@ class DroneController extends Controller
 
     public function updateDrone(Request $request)
     {
-        $drone = Drone::find($request->$id);
+        $drone = Drone::find($request->id);
         if ($drone) {
             $drone->name = $request->name ?? $drone->name;
             $drone->serial_number = $request->serial_number ?? $drone->serial_number;
@@ -144,26 +144,16 @@ class DroneController extends Controller
             $drone->operation_system = $request->operation_system ?? $drone->operation_system;
             $drone->communication_system = $request->communication_system ?? $drone->communication_system;
             $drone->description = $request->description ?? $drone->description;
-            if($request->hasFile('cert_emergency_procedure')){
-                Storage::delete($drone->cert_emergency_procedure);
+            if($request->hasFile('cert_emergency_procedure'))
                 $drone->cert_emergency_procedure = $request->file('cert_emergency_procedure')->store('cert_emergency_procedure', 'public');
-            }
-            if($request->hasFile('cert_insurance_doc')){
-                Storage::delete($drone->cert_insurance_doc);
+            if($request->hasFile('cert_insurance_doc'))
                 $drone->cert_insurance_doc = $request->file('cert_insurance_doc')->store('cert_insurance_doc', 'public');
-            }
-            if($request->hasFile('cert_equipment_list')){
-                Storage::delete($drone->cert_equipment_list);
+            if($request->hasFile('cert_equipment_list'))
                 $drone->cert_equipment_list = $request->file('cert_equipment_list')->store('cert_equipment_list', 'public');
-            }
-            if($request->hasFile('cert_drone_photo')){
-                Storage::delete($drone->cert_drone_photo);
+            if($request->hasFile('cert_drone_photo'))
                 $drone->cert_drone_photo = $request->file('cert_drone_photo')->store('cert_drone_photo', 'public');
-            }
-            if($request->hasFile('cert_drone_certificate')){
-                Storage::delete($drone->cert_drone_certificate);
+            if($request->hasFile('cert_drone_certificate'))
                 $drone->cert_drone_certificate = $request->file('cert_drone_certificate')->store('cert_drone_certificate', 'public');
-            }
             $drone->expiration_date = $request->expiration_date ?? $drone->expiration_date;
             return response()->json([
                 'message' => 'Drone updated!',

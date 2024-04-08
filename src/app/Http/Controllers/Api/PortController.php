@@ -92,13 +92,13 @@ class PortController extends Controller
                 if ($request->hasFile('port_document'))
                     $port->port_document = $request->file('port_document')->store('port-document', 'public');
 
-                $port->name = $request->name;
-                $port->operator_address = $request->operator_address;
-                $port->office_address = $request->office_address;
-                $port->city = $request->city;
-                $port->phone_number = $request->phone_number;
-                $port->longitude = $request->longitude;
-                $port->latitude = $request->latitude;
+                $port->name = $request->name ?? $port->name;
+                $port->operator_address = $request->operator_address ?? $port->operator_address;
+                $port->office_address = $request->office_address ?? $port->office_address;
+                $port->city = $request->city ?? $port->city;
+                $port->phone_number = $request->phone_number ?? $port->phone_number;
+                $port->longitude = $request->longitude ?? $port->longitude;
+                $port->latitude = $request->latitude ?? $port->latitude;
                 $port->save();
 
                 return response()->json([

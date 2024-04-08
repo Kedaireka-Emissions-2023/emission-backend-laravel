@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\DroneController;
 use App\Http\Controllers\Api\PortController;
 use App\Http\Controllers\Api\EmissionController;
 use App\Http\Controllers\Api\EmissionResultController;
+use App\Http\Controllers\Api\EmissionDataController;
 
 Route::get('', function () {
     return new JsonResponse([
@@ -29,6 +30,17 @@ Route::get('ports/{id}/doc', [PortController::class, 'get_port_document']);
 // Download Document
 Route::get('download/{path}', [EmissionResultController::class, 'download'])
     ->where('path', '.*');
+
+// Emission Data
+Route::get('emission-data/{id}', [EmissionDataController::class, 'getEmissionData']);
+Route::get('emission-data', [EmissionDataController::class, 'getAllEmissionData']);
+Route::get('emission-data/check/{checkId}', [EmissionDataController::class, 'getEmissionDataByCheckId']);
+Route::get('emission-data/vessel/{vesseId}', [EmissionDataController::class, 'getEmissionDataByVesselId']);
+Route::get('emission-data/drone/{droneId}', [EmissionDataController::class, 'getEmissionDataByDroneId']);
+Route::get('emission-data/port/{portId}', [EmissionDataController::class, 'getEmissionDataByPortId']);
+Route::post('emission-data', [EmissionDataController::class, 'createEmissionData']);
+Route::post('emission-data/update', [EmissionDataController::class, 'updateEmissionData']);
+Route::delete('emission-data/{id}', [EmissionDataController::class, 'deleteEmissionData']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile', [UserController::class, 'profile']);

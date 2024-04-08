@@ -50,7 +50,6 @@ class EmissionController extends Controller
                 'drone_id' => 'required|integer',
                 'vessel_id' => 'required|integer',
                 'port_id' => 'required|integer',
-                'link' => 'required|string',
                 'date' => 'required',
             ]);
 
