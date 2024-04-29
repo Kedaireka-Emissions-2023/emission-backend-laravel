@@ -35,6 +35,7 @@ Route::get('download/{path}', [EmissionResultController::class, 'download'])
 Route::get('emission-data/{id}', [EmissionDataController::class, 'getEmissionData']);
 Route::get('emission-data', [EmissionDataController::class, 'getAllEmissionData']);
 Route::get('emission-data/check/{checkId}', [EmissionDataController::class, 'getEmissionDataByCheckId']);
+Route::get('emission-data/check/filtered/{checkId}', [EmissionDataController::class, 'getEmissionDataByCheckIdFiltered']);
 Route::get('emission-data/vessel/{vesseId}', [EmissionDataController::class, 'getEmissionDataByVesselId']);
 Route::get('emission-data/drone/{droneId}', [EmissionDataController::class, 'getEmissionDataByDroneId']);
 Route::get('emission-data/port/{portId}', [EmissionDataController::class, 'getEmissionDataByPortId']);

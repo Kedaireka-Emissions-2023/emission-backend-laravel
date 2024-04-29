@@ -65,6 +65,41 @@ class EmissionDataController extends Controller
         }
     }
 
+    public function getEmissionDataByCheckIdFiltered($checkId){
+        try {
+            $emissionData = EmissionData::whereHas('emission', function($query) use ($checkId){
+                $query->where('checking_id', $checkId);
+            })->orderBy('date')->orderBy('time')->get();
+
+            $filteredData = [];
+            $countByMinute = [];
+            $maxDataPointsPerMinute = 4;
+
+            foreach ($emissionData as $data) {
+                $dateTime = $data->date . ' ' . $data->time;
+                $minute = date('Y-m-d H:i', strtotime($dateTime));
+
+                if (!isset($countByMinute[$minute])) {
+                    $countByMinute[$minute] = 0;
+                }
+
+                if ($countByMinute[$minute] < $maxDataPointsPerMinute) {
+                    $filteredData[] = $data;
+                    $countByMinute[$minute]++;
+                }
+            }
+
+            return response()->json([
+                'message' => 'Success',
+                'data' => $filteredData
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Emission Data not found!'
+            ], 404);
+        }
+    }
+
     public function getEmissionDataByVesselId($vesselId){
         try {
             $emissionData = EmissionData::whereHas('emission', function($query) use ($vesselId){
