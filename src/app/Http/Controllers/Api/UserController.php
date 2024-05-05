@@ -19,6 +19,8 @@ use Cloudinary\Configuration\Configuration;
 use Cloudinary\Api\Upload\UploadApi;
 
 use App\Models\User;
+use App\Models\Port;
+use App\Models\Emission;
 
 class UserController extends Controller
 {
@@ -136,16 +138,60 @@ class UserController extends Controller
         ], 200);
     }
 
-    private function uploadToDrive($image)
+    public function getTotalPilotOnPort($portId)
     {
-        $path = $image->store('public/images');
-        $imageUrl = Storage::path($path);
+        try {
+            $port = Port::where('port_id', $portId)->first();
 
-        Gdrive::put($imageUrl, $image);
+            if (!$port) {
+                return response()->json([
+                    'message' => 'Port not found',
+                    'data' => null
+                ], 404);
+            }
 
-        //delete storage
-        Storage::delete($path);
-        return $path;
+            $emissions = Emission::where('port_id', $port->id)->get();
+
+            $distinctPilots = [];
+
+            foreach ($emissions as $emission) {
+                $pilotData = $emission->get('pilot');
+                dd($pilotData);
+                if (is_string($pilotData)) {
+                    $pilots = json_decode($pilotData, true);
+                    if (is_array($pilots)) {
+                        foreach ($pilots as $pilot) {
+                            $name = $pilot['name'];
+                            if (!in_array($name, $distinctPilots)) {
+                                $distinctPilots[] = $name;
+                            }
+                        }
+                    }
+                } elseif (is_object($pilotData) && $pilotData instanceof \Spatie\SchemalessAttributes\SchemalessAttributes) {
+                    $pilotArray = $pilotData->toArray();
+                    foreach ($pilotArray as $pilot) {
+                        $name = $pilot['name'];
+                        if (!in_array($name, $distinctPilots)) {
+                            $distinctPilots[] = $name;
+                        }
+                    }
+                }
+            }
+
+            $pilotCounts = count($distinctPilots);
+
+            return response()->json([
+                'message' => 'Success',
+                'data' => [
+                    'Pilots with emission' => $pilotCounts
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error getting total pilot',
+                'data' => $e->getMessage()
+            ], 400);
+        }
     }
 
     public function update(Request $request)

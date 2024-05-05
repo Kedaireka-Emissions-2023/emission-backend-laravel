@@ -24,9 +24,6 @@ Route::prefix('auth')->group(function () {
     Route::post('login', [UserController::class, 'login']);
 });
 
-// Port Document
-Route::get('ports/{id}/doc', [PortController::class, 'get_port_document']);
-
 // Download Document
 Route::get('download/{path}', [EmissionResultController::class, 'download'])
     ->where('path', '.*');
@@ -76,6 +73,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('emission-results', [EmissionResultController::class, 'createEmissionResult']);
         Route::post('emission-results/update', [EmissionResultController::class, 'updateEmissionResult']);
         Route::delete('emission-results/{id}', [EmissionResultController::class, 'deleteEmissionResult']);
+
+        // Custom
+        // Get Total Vessel having emission and based on port ID
+        Route::get('vessels/onport/{portId}', [VesselController::class, 'getTotalVesselOnPort']);
+        // Get Total Drone having emission and based on port ID
+        Route::get('drones/onport/{portId}', [DroneController::class, 'getTotalDroneOnPort']);
+        // Get Total Pilot having emission and based on port ID
+        Route::get('pilot/onport/{portId}', [UserController::class, 'getTotalPilotOnPort']);
     });
 
     Route::middleware('role:BKI,PORT')->group(function () {

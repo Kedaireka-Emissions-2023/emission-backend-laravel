@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\Drone;
+use App\Models\Port;
 
 class DroneController extends Controller
 {
@@ -54,6 +55,34 @@ class DroneController extends Controller
                 'Drones with emission' => $totalEmission
             ]
         ], 200);
+    }
+
+    public function getTotalDroneOnPort($portId)
+    {
+        try {
+            $port = Port::where('port_id', $portId)->first();
+            if ($port) {
+                $droneWithEmission = Drone::whereHas('emissions', function ($query) use ($port) {
+                    $query->where('port_id', $port->id);
+                })->count();
+                return response()->json([
+                    'message' => 'Success',
+                    'data' => [
+                        'Drones with emission' => $droneWithEmission
+                    ]
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'Port not found',
+                    'data' => null
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error getting total drone',
+                'data' => $e->getMessage()
+            ], 400);
+        }
     }
 
     public function createDrone(Request $request)

@@ -62,6 +62,36 @@ class VesselController extends Controller
         }
     }
 
+    public function getTotalVesselOnPort($portId)
+    {
+        try {
+            $port = Port::where('port_id', $portId)->first();
+            if (!$port) {
+                return response()->json([
+                    'message' => 'Port not found',
+                    'data' => null
+                ], 400);
+            }
+
+            $vesselWithEmission = Vessel::whereHas('emissions', function ($query) use ($port) {
+                $query->where('port_id', $port->id);
+            })->count();
+
+            return response()->json([
+                'message' => 'Success',
+                'data' => [
+                    'Vessel with emission' => $vesselWithEmission
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error getting total vessel',
+                'data' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+
     public function createVessel(Request $request)
     {
         try {
