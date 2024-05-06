@@ -13,13 +13,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'id',
+        'port_id',
         'full_name',
         'email',
         'email_recovery',
@@ -40,21 +36,11 @@ class User extends Authenticatable
         'updated_at',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
@@ -65,4 +51,15 @@ class User extends Authenticatable
         return $this->belongsToMany(Drone::class, 'pilots', 'user_id', 'drone_id')
             ->as('pilots');
     }
+
+    public function emissions()
+    {
+        return $this->belongsToMany(Emission::class, 'emission_user');
+    }
+
+    public function port()
+    {
+        return $this->belongsTo(Port::class);
+    }
+
 }

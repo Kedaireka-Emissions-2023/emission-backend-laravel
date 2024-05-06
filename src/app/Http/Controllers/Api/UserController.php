@@ -13,14 +13,10 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 
-use Yaza\LaravelGoogleDriveStorage\Gdrive;
-
-use Cloudinary\Configuration\Configuration;
-use Cloudinary\Api\Upload\UploadApi;
-
 use App\Models\User;
 use App\Models\Port;
 use App\Models\Emission;
+use App\Models\EmissionUser;
 
 class UserController extends Controller
 {
@@ -47,6 +43,27 @@ class UserController extends Controller
             ], 400);
         }
 
+        if ($request->role == 'PORT') {
+            $validator = Validator::make($request->all(), [
+                'port_id' => 'required|integer',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors(),
+                ], 400);
+            }
+
+            $port = Port::where('id', $request->port_id)->first();
+
+            if (!$port) {
+                return response()->json([
+                    'message' => 'Port not found',
+                ], 404);
+            }
+        }
+
         $user = new User();
         $user->full_name = $request->full_name;
         $user->email = $request->email;
@@ -56,6 +73,7 @@ class UserController extends Controller
         $user->company_name = $request->company_name;
         $user->phone_number = $request->phone_number;
         $user->company_address = $request->company_address;
+        $user->port_id = $request->port_id;
 
         $user->ktp = $request->ktp;
         $user->certificate = $request->certificate;
@@ -117,20 +135,26 @@ class UserController extends Controller
         }
     }
 
-    public function getAllPilot(Request $request)
+    public function getTotalPilotOnPort($portId)
     {
-        $page = $request->query('page');
-        $limit = $request->query('limit');
-        $query = $request->query('q');
+        // Find the port by port_id
+        $port = Port::where('port_id', $portId)->first();
 
-        // $pilots = User::where('role', 'PILOT')->paginate($limit, ['*'], 'page', $page);
-        $pilots = User::where('role', 'PILOT')
-            ->where(function ($queryBuilder) use ($query) {
-                $queryBuilder->where('full_name', 'like', '%' . $query . '%')
-                    ->orWhere('email', 'like', '%' . $query . '%')
-                    ->orWhere('company_name', 'like', '%' . $query . '%');
-            })
-            ->paginate($limit, ['*'], 'page', $page);
+        if (!$port) {
+            return response()->json([
+                'message' => 'Failed',
+                'data' => 'Port not found'
+            ], 404);
+        }
+
+        // Count distinct users associated with emissions for the found port
+        $pilots = Emission::where('port_id', $port->id)
+                    ->with('users') // Eager load the users relationship
+                    ->get()
+                    ->pluck('users') // Extract the users collection from each emission
+                    ->flatten() // Flatten the collection of collections into a single collection
+                    ->unique('id') // Remove duplicates based on user id
+                    ->count();
 
         return response()->json([
             'message' => 'Success',
@@ -138,65 +162,9 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function getTotalPilotOnPort($portId)
-    {
-        try {
-            $port = Port::where('port_id', $portId)->first();
-
-            if (!$port) {
-                return response()->json([
-                    'message' => 'Port not found',
-                    'data' => null
-                ], 404);
-            }
-
-            $emissions = Emission::where('port_id', $port->id)->get();
-
-            $distinctPilots = [];
-
-            foreach ($emissions as $emission) {
-                $pilotData = $emission->get('pilot');
-                dd($pilotData);
-                if (is_string($pilotData)) {
-                    $pilots = json_decode($pilotData, true);
-                    if (is_array($pilots)) {
-                        foreach ($pilots as $pilot) {
-                            $name = $pilot['name'];
-                            if (!in_array($name, $distinctPilots)) {
-                                $distinctPilots[] = $name;
-                            }
-                        }
-                    }
-                } elseif (is_object($pilotData) && $pilotData instanceof \Spatie\SchemalessAttributes\SchemalessAttributes) {
-                    $pilotArray = $pilotData->toArray();
-                    foreach ($pilotArray as $pilot) {
-                        $name = $pilot['name'];
-                        if (!in_array($name, $distinctPilots)) {
-                            $distinctPilots[] = $name;
-                        }
-                    }
-                }
-            }
-
-            $pilotCounts = count($distinctPilots);
-
-            return response()->json([
-                'message' => 'Success',
-                'data' => [
-                    'Pilots with emission' => $pilotCounts
-                ]
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error getting total pilot',
-                'data' => $e->getMessage()
-            ], 400);
-        }
-    }
-
     public function update(Request $request)
     {
-        $user = auth()->user(); // Get the authenticated user
+        $user = auth()->user();
 
         $validator = Validator::make($request->all(), [
             'full_name' => 'string|max:255',
@@ -230,27 +198,21 @@ class UserController extends Controller
 
             $user->password = Hash::make($request->new_password);
         } elseif ($request->has('new_password') || $request->has('confirmation_password')) {
-            // New password-related fields are present, but old password is missing
             return response()->json([
                 'message' => 'Old Password is required when updating the password',
             ], 400);
         } elseif ($request->has('old_password')) {
-            // Old password is present, but new password-related fields are missing
             return response()->json([
                 'message' => 'New Password and Confirmation Password are required when updating the password',
             ], 400);
         }
 
-        if ($request->has('ktp')) {
-            $temp = $request->file('ktp');
-            $res = $this->uploadImage($temp);
-            $user->ktp = $res['secure_url'];
+        if ($request->hasFile('ktp')) {
+            $user->ktp = $request->file('ktp')->store('ktp', 'public');
         }
 
-        if ($request->has('certificate')) {
-            $temp = $request->file('certificate');
-            $res = $this->uploadImage($temp);
-            $user->certificate = $res['secure_url'];
+        if ($request->hasFile('certificate')) {
+            $user->certificate = $request->file('certificate')->store('certificate', 'public');
         }
 
         if ($request->has('full_name')) $user->full_name = $request->full_name;
@@ -276,27 +238,12 @@ class UserController extends Controller
         ]);
     }
 
-    private function uploadImage($image)
+    public function logout(Request $request)
     {
-        $path = $image->store('public/images');
-        $imageUrl = Storage::path($path);
+        $request->user()->currentAccessToken()->delete();
 
-        $my_key = env('CLOUDINARY_API_KEY');
-        $my_secret = env('CLOUDINARY_API_SECRET');
-        $my_cloud = env('CLOUDINARY_CLOUD_NAME');
-        Configuration::instance([
-            'cloud' => [
-                'cloud_name' => $my_cloud,
-                'api_key' => $my_key,
-                'api_secret' => $my_secret
-            ]
+        return response()->json([
+            'message' => 'Logout successful',
         ]);
-
-        $uploadApi = new UploadApi();
-        $result = $uploadApi->upload($imageUrl, ['resource_type' => 'auto']);
-
-        //delete storage
-        Storage::delete($path);
-        return $result;
     }
 }
