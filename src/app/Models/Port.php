@@ -23,4 +23,14 @@ class Port extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function emissions(): HasMany
+    {
+        return $this->hasMany(Emission::class, 'port_id', 'id');
+    }
 }

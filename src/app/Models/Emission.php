@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 use Spatie\SchemalessAttributes\SchemalessAttributesTrait;
 
+use App\Models\Drone;
+use App\Models\Vessel;
+use App\Models\Port;
+use App\Models\User;
+
 class Emission extends Model
 {
     use HasFactory, SchemalessAttributesTrait;
@@ -19,7 +24,6 @@ class Emission extends Model
         'vessel_id',
         'port_id',
         'checking_id',
-        'pilot',
         'preparation',
         'date',
         'time',
@@ -34,27 +38,30 @@ class Emission extends Model
     ];
 
     protected $casts = [
-        'pilot' => SchemalessAttributes::class,
         'preparation' => SchemalessAttributes::class,
     ];
 
     protected $schemalessAttributes = [
-        'pilot',
         'preparation',
     ];
 
-    public function drone(): BelongsTo
+    public function drone()
     {
         return $this->belongsTo(Drone::class, 'drone_id', 'id');
     }
 
-    public function vessel(): BelongsTo
+    public function vessel()
     {
         return $this->belongsTo(Vessel::class, 'vessel_id', 'id');
     }
 
-    public function port(): BelongsTo
+    public function port()
     {
         return $this->belongsTo(Port::class, 'port_id', 'id');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'emission_user');
     }
 }

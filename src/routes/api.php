@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\PortController;
 use App\Http\Controllers\Api\EmissionController;
 use App\Http\Controllers\Api\EmissionResultController;
 use App\Http\Controllers\Api\EmissionDataController;
+use App\Http\Controllers\Api\EmissionUserController;
 
 Route::get('', function () {
     return new JsonResponse([
@@ -41,8 +42,10 @@ Route::post('emission-data/update', [EmissionDataController::class, 'updateEmiss
 Route::delete('emission-data/{id}', [EmissionDataController::class, 'deleteEmissionData']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    // User
     Route::get('profile', [UserController::class, 'profile']);
     Route::post('users/update', [UserController::class, 'update']);
+    Route::post('logout', [UserController::class, 'logout']);
 
     Route::middleware('role:BKI,PILOT,PORT')->group(function () {
         // Vessel
@@ -61,6 +64,12 @@ Route::middleware('auth:sanctum')->group(function () {
         // Emission
         Route::get('emissions', [EmissionController::class, 'getAll']);
         Route::get('emissions/{id}', [EmissionController::class, 'getEmissionbyId']);
+        Route::get('emissions/byvessel/{vesselId}', [EmissionController::class, 'getEmissionbyVesselId']);
+        Route::get('emissions/bydrone/{droneId}', [EmissionController::class, 'getEmissionbyDroneId']);
+        Route::get('emissions/byport/{portId}', [EmissionController::class, 'getEmissionbyPortId']);
+        Route::get('emissions/bypilot/{pilotId}', [EmissionController::class, 'getEmissionbyPilotId']);
+        // Test
+        Route::get('emissions/test/{emissionId}', [EmissionController::class, 'testRelationships']);
 
         // Port
         Route::get('ports', [PortController::class, 'getAll']);
@@ -73,6 +82,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('emission-results', [EmissionResultController::class, 'createEmissionResult']);
         Route::post('emission-results/update', [EmissionResultController::class, 'updateEmissionResult']);
         Route::delete('emission-results/{id}', [EmissionResultController::class, 'deleteEmissionResult']);
+
+        // Emission User(PILOT)
+        Route::get('pilots', [UserController::class, 'getAllPilot']);
+        Route::post('emission-pilot', [EmissionUserController::class, 'setSniffingPilot']);
 
         // Custom
         // Get Total Vessel having emission and based on port ID
@@ -97,15 +110,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('ports/{id}', [PortController::class, 'deletePort']);
     });
 
-    Route::middleware('role:BKI,PILOT')->group(function () {
-        // Pilot
-        Route::get('pilots', [UserController::class, 'getAllPilot']);
-    });
-
     Route::middleware('role:PILOT,PORT')->group(function () {
         // Emission
         Route::post('emissions', [EmissionController::class, 'createEmission']);
         Route::post('update/emissions', [EmissionController::class, 'updateEmission']);
         Route::delete('emissions/{id}', [EmissionController::class, 'deleteEmission']);
+    });
+
+    Route::middleware('role:BKI,PILOT')->group(function () {
+        // Pilot
     });
 });
