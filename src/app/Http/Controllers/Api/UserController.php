@@ -145,7 +145,6 @@ class UserController extends Controller
         }
     }
 
-
     public function getTotalPilotOnPort($portId)
     {
         // Find the port by port_id
