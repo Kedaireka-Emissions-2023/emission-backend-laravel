@@ -74,6 +74,8 @@ Route::middleware('auth:sanctum')->group(function () {
         // Port
         Route::get('ports', [PortController::class, 'getAll']);
         Route::get('ports/{id}', [PortController::class, 'getPortbyId']);
+        Route::get('ports/direct/{id}', [PortController::class, 'directGet']);
+        Route::post('ports/direct/update', [PortController::class, 'directUpdate']);
 
         // Emission-Result
         Route::get('emission-results', [EmissionResultController::class, 'getAllEmissionResult']);
