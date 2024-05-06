@@ -116,21 +116,31 @@ class UserController extends Controller
     public function profile(Request $request)
     {
         try {
-            $userLogin = auth()->user();
-            if (!$userLogin) {
+            $user = auth()->user();
+
+            if (!$user) {
                 return response()->json([
                     'message' => 'Unauthorized',
                 ], 401);
             }
-            $user = Auth::user();
+
+            $userWithPort = User::with('port')->find($user->id);
+
+            if (!$userWithPort) {
+                return response()->json([
+                    'message' => 'User not found',
+                ], 404);
+            }
+
+            $userWithPort->makeHidden(['created_at', 'updated_at', 'email_verified_at']);
 
             return response()->json([
                 'message' => 'Profile retrieved successfully',
-                'user' => $user,
+                'user' => $userWithPort,
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
-                'message' => 'Profile retrieved failed',
+                'message' => 'Profile retrieval failed',
             ], 400);
         }
     }
