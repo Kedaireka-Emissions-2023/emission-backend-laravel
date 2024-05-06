@@ -237,6 +237,7 @@ class UserController extends Controller
         if ($request->has('nik')) $user->nik = $request->nik;
         if ($request->has('status')) $user->status = $request->input('status', 'EXPIRED');
         if ($request->has('exp_certificate')) $user->exp_certificate = $request->exp_certificate;
+        if ($request->has('port_id')) $user->port_id = $request->port_id;
 
         $token = $user->createToken('authToken', ['*'], Carbon::now()->addHour(10));
 
