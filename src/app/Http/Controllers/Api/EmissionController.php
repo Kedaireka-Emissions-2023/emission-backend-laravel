@@ -3,7 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 use App\Models\Emission;
 use App\Models\User;
@@ -15,7 +20,13 @@ class EmissionController extends Controller
 {
     public function getAll(Request $request)
     {
-        $emissions = Emission::all();
+        $page = $request->query('page');
+        $limit = $request->query('limit');
+        $query = $request->query('q');
+
+        $emissions = Emission::where('name', 'like', '%' . $query . '%')
+            ->orWhere('checking_id', 'like', '%' . $query . '%')
+            ->paginate($limit, ['*'], 'page', $page);
 
         if ($emissions->isEmpty()) {
             return response()->json([
@@ -70,9 +81,15 @@ class EmissionController extends Controller
         }
     }
 
-    public function getEmissionbyVesselId($vesselId)
+    public function getEmissionbyVesselId(Request $request, $vesselId)
     {
-        $emissions = Emission::where('vessel_id', $vesselId)->get();
+        $page = $request->query('page');
+        $limit = $request->query('limit');
+        $query = $request->query('q');
+
+        $emissions = Emission::where('vessel_id', $vesselId)
+        ->orWhere('name', 'like', '%' . $query . '%')
+        ->paginate($limit, ['*'], 'page', $page);
 
         if ($emissions->isEmpty()) {
             return response()->json([
@@ -110,9 +127,15 @@ class EmissionController extends Controller
         ], 200);
     }
 
-    public function getEmissionbyDroneId($droneId)
+    public function getEmissionbyDroneId(Request $request, $droneId)
     {
-        $emissions = Emission::where('drone_id', $droneId)->get();
+        $page = $request->query('page');
+        $limit = $request->query('limit');
+        $query = $request->query('q');
+
+        $emissions = Emission::where('drone_id', $droneId)
+        ->orWhere('name', 'like', '%' . $query . '%')
+        ->paginate($limit, ['*'], 'page', $page);
 
         if ($emissions->isEmpty()) {
             return response()->json([
@@ -150,9 +173,15 @@ class EmissionController extends Controller
         ], 200);
     }
 
-    public function getEmissionbyPortId($portId)
+    public function getEmissionbyPortId(Request $request, $portId)
     {
-        $emissions = Emission::where('port_id', $portId)->get();
+        $page = $request->query('page');
+        $limit = $request->query('limit');
+        $query = $request->query('q');
+
+        $emissions = Emission::where('port_id', $portId)
+        ->orWhere('name', 'like', '%' . $query . '%')
+        ->paginate($limit, ['*'], 'page', $page);
 
         if ($emissions->isEmpty()) {
             return response()->json([
