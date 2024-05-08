@@ -141,11 +141,11 @@ class UserController extends Controller
             }
 
             $userWithPort->makeHidden(['created_at', 'updated_at', 'email_verified_at']);
+            $userWithPort->codePort = $port->port_id;
 
             return response()->json([
                 'message' => 'Profile retrieved successfully',
-                'user' => $userWithPort,
-                'port' => $port->port_id
+                'user' => $userWithPort
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
