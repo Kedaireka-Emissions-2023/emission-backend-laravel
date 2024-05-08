@@ -124,6 +124,14 @@ class UserController extends Controller
                 ], 401);
             }
 
+            $port = Port::where('id', $user->port_id)->first();
+
+            if(!$port) {
+                return response()->json([
+                    'message' => 'Port not found',
+                ], 404);
+            }
+
             $userWithPort = User::with('port')->find($user->id);
 
             if (!$userWithPort) {
@@ -137,6 +145,7 @@ class UserController extends Controller
             return response()->json([
                 'message' => 'Profile retrieved successfully',
                 'user' => $userWithPort,
+                'port' => $port->port_id
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
