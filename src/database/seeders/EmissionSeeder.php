@@ -22,8 +22,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'EBLW001',
                 'date' => '2024-03-03',
                 'time' => '16:15',
-                'status' => 'MEDIUM',
-                'pilot' => '[{"name":"Made Wijaya"},{"name":"Dara Asri"}]',
+                'status' => 'MEDIUM'
             ),
             1 =>
             array(
@@ -34,8 +33,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'EBLW002',
                 'date' => '2024-03-13',
                 'time' => '13:21',
-                'status' => 'LOW',
-                'pilot' => '[{"name":"Dara Asri"},{"name":"Made Wijaya"}]',
+                'status' => 'LOW'
             ),
             2 =>
             array(
@@ -46,8 +44,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'EBLW003',
                 'date' => '2024-03-01',
                 'time' => '15:37',
-                'status' => 'LOW',
-                'pilot' => '[{"name":"Made Wijaya"},{"name":"Dara Asri"}]',
+                'status' => 'LOW'
             ),
             3 =>
             array(
@@ -59,7 +56,6 @@ class EmissionSeeder extends Seeder
                 'date' => '2024-03-09',
                 'time' => '09:19',
                 'status' => 'HIGH',
-                'pilot' => '[{"name":"Dara Asri"},{"name":"Made Wijaya"}]',
             ),
             4 =>
             array(
@@ -70,8 +66,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'EBLW005',
                 'date' => '2024-03-11',
                 'time' => '16:23',
-                'status' => 'HIGH',
-                'pilot' => '[{"name":"Made Wijaya"},{"name":"Dara Asri"}]',
+                'status' => 'HIGH'
             ),
             5 =>
             array(
@@ -82,8 +77,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'EMAK001',
                 'date' => '2024-03-05',
                 'time' => '09:46',
-                'status' => 'MEDIUM',
-                'pilot' => '[{"name":"Fabian Malik"},{"name":"Melati Sari"}]',
+                'status' => 'MEDIUM'
             ),
             6 =>
             array(
@@ -94,8 +88,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'EMAK002',
                 'date' => '2024-03-01',
                 'time' => '13:24',
-                'status' => 'LOW',
-                'pilot' => '[{"name":"Melati Sari"},{"name":"Fabian Malik"}]',
+                'status' => 'LOW'
             ),
             7 =>
             array(
@@ -106,8 +99,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'EMAK003',
                 'date' => '2024-03-23',
                 'time' => '16:15',
-                'status' => 'MEDIUM',
-                'pilot' => '[{"name":"Fabian Malik"},{"name":"Melati Sari"}]',
+                'status' => 'MEDIUM'
             ),
             8 =>
             array(
@@ -118,8 +110,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'EMAK004',
                 'date' => '2024-03-10',
                 'time' => '11:55',
-                'status' => 'PROCESS',
-                'pilot' => '[]',
+                'status' => 'PROCESS'
             ),
             9 =>
             array(
@@ -130,8 +121,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'EMAK005',
                 'date' => '2024-03-08',
                 'time' => '13:24',
-                'status' => 'MEDIUM',
-                'pilot' => '[{"name":"Fabian Malik"},{"name":"Melati Sari"}]',
+                'status' => 'MEDIUM'
             ),
             10 =>
             array(
@@ -142,8 +132,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'ESRG001',
                 'date' => '2024-03-02',
                 'time' => '10:00',
-                'status' => 'HIGH',
-                'pilot' => '[{"name":"Bayu Angkasa"}]',
+                'status' => 'HIGH'
             ),
             11 =>
             array(
@@ -154,8 +143,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'ESRG002',
                 'date' => '2024-03-04',
                 'time' => '07:00',
-                'status' => 'MEDIUM',
-                'pilot' => '[{"name":"Nirmala Dewi"},{"name":"Bayu Angkasa"}]',
+                'status' => 'MEDIUM'
             ),
             12 =>
             array(
@@ -166,8 +154,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'ESRG003',
                 'date' => '2024-03-14',
                 'time' => '12:06',
-                'status' => 'HIGH',
-                'pilot' => '[{"name":"Bayu Angkasa"}]',
+                'status' => 'HIGH'
             ),
             13 =>
             array(
@@ -178,8 +165,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'ESRG004',
                 'date' => '2024-03-07',
                 'time' => '10:00',
-                'status' => 'HIGH',
-                'pilot' => '[{"name":"Nirmala Dewi"}]',
+                'status' => 'HIGH'
             ),
             14 =>
             array(
@@ -190,8 +176,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'ESRG005',
                 'date' => '2024-03-08',
                 'time' => '07:00',
-                'status' => 'MEDIUM',
-                'pilot' => '[{"name":"Nirmala Dewi"}]',
+                'status' => 'MEDIUM'
             ),
             15 =>
             array(
@@ -202,8 +187,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'ESUB001',
                 'date' => '2024-03-17',
                 'time' => '13:58',
-                'status' => 'LOW',
-                'pilot' => '[{"name":"Satria Pamungkas"},{"name":"Ayu Sekar"}]',
+                'status' => 'LOW'
             ),
             16 =>
             array(
@@ -214,8 +198,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'ESUB002',
                 'date' => '2024-03-12',
                 'time' => '10:00',
-                'status' => 'HIGH',
-                'pilot' => '[{"name":"Ayu Sekar"},{"name":"Satria Pamungkas"}]',
+                'status' => 'HIGH'
             ),
             17 =>
             array(
@@ -226,8 +209,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'ESUB003',
                 'date' => '2024-03-12',
                 'time' => '14:00',
-                'status' => 'LOW',
-                'pilot' => '[{"name":"Satria Pamungkas"},{"name":"Ayu Sekar"}]',
+                'status' => 'LOW'
             ),
             18 =>
             array(
@@ -238,8 +220,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'ESUB004',
                 'date' => '2024-03-25',
                 'time' => '13:58',
-                'status' => 'MEDIUM',
-                'pilot' => '[{"name":"Ayu Sekar"},{"name":"Satria Pamungkas"}]',
+                'status' => 'MEDIUM'
             ),
             19 =>
             array(
@@ -250,8 +231,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'ESUB005',
                 'date' => '2024-03-28',
                 'time' => '14:00',
-                'status' => 'PROCESS',
-                'pilot' => '[]',
+                'status' => 'PROCESS'
             ),
             20 =>
             array(
@@ -262,8 +242,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'ETPR001',
                 'date' => '2024-03-20',
                 'time' => '08:11',
-                'status' => 'LOW',
-                'pilot' => '[{"name":"Reno Prasetya"}]',
+                'status' => 'LOW'
             ),
             21 =>
             array(
@@ -274,8 +253,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'ETPR002',
                 'date' => '2024-03-15',
                 'time' => '18:05',
-                'status' => 'LOW',
-                'pilot' => '[{"name":"Mega Putra"},{"name":"Reno Prasetya"}]',
+                'status' => 'LOW'
             ),
             22 =>
             array(
@@ -286,8 +264,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'ETPR003',
                 'date' => '2024-03-27',
                 'time' => '08:54',
-                'status' => 'LOW',
-                'pilot' => '[{"name":"Mega Putra"}]',
+                'status' => 'LOW'
             ),
             23 =>
             array(
@@ -298,8 +275,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'ETPR004',
                 'date' => '2024-03-22',
                 'time' => '18:05',
-                'status' => 'PROCESS',
-                'pilot' => '[]',
+                'status' => 'PROCESS'
             ),
             24 =>
             array(
@@ -310,8 +286,7 @@ class EmissionSeeder extends Seeder
                 'checking_id' => 'ETPR005',
                 'date' => '2024-04-06',
                 'time' => '08:01',
-                'status' => 'PROCESS',
-                'pilot' => '[]',
+                'status' => 'PROCESS'
             ),
         ));
     }

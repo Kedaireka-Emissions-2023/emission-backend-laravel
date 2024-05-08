@@ -123,13 +123,13 @@ class UserController extends Controller
                     'message' => 'Unauthorized',
                 ], 401);
             }
-
-            $port = Port::where('id', $user->port_id)->first();
-
-            if(!$port) {
-                return response()->json([
-                    'message' => 'Port not found',
-                ], 404);
+            if($user->role == 'PORT'){
+                $port = Port::where('id', $user->port_id)->first();
+                if(!$port) {
+                    return response()->json([
+                        'message' => 'Port not found',
+                    ], 404);
+                }
             }
 
             $userWithPort = User::with('port')->find($user->id);
