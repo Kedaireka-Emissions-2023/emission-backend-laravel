@@ -132,6 +132,14 @@ class UserController extends Controller
                 }
             }
 
+            if($user->role != 'PORT'){
+                $user->makeHidden(['created_at', 'updated_at', 'email_verified_at']);
+                return response()->json([
+                    'message' => 'Profile retrieved successfully',
+                    'user' => $user
+                ], 200);
+            }
+
             $userWithPort = User::with('port')->find($user->id);
 
             if (!$userWithPort) {
