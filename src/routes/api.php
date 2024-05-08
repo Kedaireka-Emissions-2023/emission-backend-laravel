@@ -29,6 +29,9 @@ Route::prefix('auth')->group(function () {
 Route::get('download/{path}', [EmissionResultController::class, 'download'])
     ->where('path', '.*');
 
+// Get port for user register need
+Route::get('ports/reg', [PortController::class, 'reg']);
+
 // Emission Data
 Route::get('emission-data/{id}', [EmissionDataController::class, 'getEmissionData']);
 Route::get('emission-data', [EmissionDataController::class, 'getAllEmissionData']);

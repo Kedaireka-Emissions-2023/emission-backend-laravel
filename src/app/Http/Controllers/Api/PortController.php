@@ -31,6 +31,15 @@ class PortController extends Controller
         ], 200);
     }
 
+    public function reg()
+    {
+        $port = Port::all();
+        return response()->json([
+            'message' => 'Success',
+            'data' => $port
+        ], 200);
+    }
+
     public function getPortbyId($id)
     {
         $port = Port::find($id);
