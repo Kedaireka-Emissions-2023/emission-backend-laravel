@@ -56,6 +56,15 @@ class PortController extends Controller
         }
     }
 
+    public function getTotalPort()
+    {
+        $total = Port::count();
+        return response()->json([
+            'message' => 'Success',
+            'data' => $total
+        ], 200);
+    }
+
     public function createPort(Request $request)
     {
         try{

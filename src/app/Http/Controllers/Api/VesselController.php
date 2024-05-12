@@ -44,6 +44,15 @@ class VesselController extends Controller
 
     public function getTotalVessel()
     {
+        $total = Vessel::count();
+        return response()->json([
+            'message' => 'Success',
+            'data' => $total
+        ], 200);
+    }
+
+    public function getTotalVesselWithEmissions()
+    {
         try {
             $total = Vessel::count();
             $vesselWithEmission = Vessel::whereHas('emissions')->count();

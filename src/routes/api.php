@@ -54,12 +54,12 @@ Route::middleware('auth:sanctum')->group(function () {
         // Vessel
         Route::get('vessels', [VesselController::class, 'getAll']);
         Route::get('vessels/{id}', [VesselController::class, 'getVesselbyId']);
-        Route::get('vessels/s/total', [VesselController::class, 'getTotalVessel']);
+        Route::get('vessels/s/total', [VesselController::class, 'getTotalVesselWithEmissions']);
 
         // Drone
         Route::get('drones', [DroneController::class, 'getAll']);
         Route::get('drones/{id}', [DroneController::class, 'getDronebyId']);
-        Route::get('drones/s/total', [DroneController::class, 'getTotalDrone']);
+        Route::get('drones/s/total', [DroneController::class, 'getTotalDroneWithEmissions']);
         Route::post('drones', [DroneController::class, 'createDrone']);
         Route::post('drones/update', [DroneController::class, 'updateDrone']);
         Route::delete('drones/{id}', [DroneController::class, 'deleteDrone']);
@@ -71,6 +71,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('emissions/bydrone/{droneId}', [EmissionController::class, 'getEmissionbyDroneId']);
         Route::get('emissions/byport/{portId}', [EmissionController::class, 'getEmissionbyPortId']);
         Route::get('emissions/bypilot/{pilotId}', [EmissionController::class, 'getEmissionbyPilotId']);
+        Route::get('emissions/b/filtered', [EmissionController::class, 'getFilteredEmission']);
+        Route::get('emissions/b/countStatus', [EmissionController::class, 'countStatus']);
         // Test
         Route::get('emissions/test/{emissionId}', [EmissionController::class, 'testRelationships']);
 
@@ -88,17 +90,19 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('emission-results/update', [EmissionResultController::class, 'updateEmissionResult']);
         Route::delete('emission-results/{id}', [EmissionResultController::class, 'deleteEmissionResult']);
 
-        // Emission User(PILOT)
+        // Pilot
         Route::get('pilots', [UserController::class, 'getAllPilot']);
         Route::post('emission-pilot', [EmissionUserController::class, 'setSniffingPilot']);
 
-        // Custom
-        // Get Total Vessel having emission and based on port ID
+        // Data in Numbers
+        Route::get('ports/b/total', [PortController::class, 'getTotalPort']);
+        Route::get('vessels/b/total', [VesselController::class, 'getTotalVessel']);
+        Route::get('drones/b/total', [DroneController::class, 'getTotalDrone']);
+        Route::get('pilots/b/total', [UserController::class, 'getTotalPilot']);
         Route::get('vessels/onport/{portId}', [VesselController::class, 'getTotalVesselOnPort']);
-        // Get Total Drone having emission and based on port ID
         Route::get('drones/onport/{portId}', [DroneController::class, 'getTotalDroneOnPort']);
-        // Get Total Pilot having emission and based on port ID
         Route::get('pilot/onport/{portId}', [UserController::class, 'getTotalPilotOnPort']);
+        Route::get('emissions/onport/{portId}', [EmissionController::class, 'getTotalEmissionOnPort']);
     });
 
     Route::middleware('role:BKI,PORT')->group(function () {

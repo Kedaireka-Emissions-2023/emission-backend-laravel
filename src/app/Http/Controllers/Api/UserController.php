@@ -162,9 +162,29 @@ class UserController extends Controller
         }
     }
 
+    public function getAllPilot(){
+        $pilots = User::where('role', 'PILOT')->get();
+
+        $pilots->makeHidden(['created_at', 'updated_at', 'email_verified_at', 'password', 'port_id', 'company_address', 'company_name', 'email_recovery']);
+
+        return response()->json([
+            'message' => 'Success',
+            'data' => $pilots
+        ], 200);
+    }
+
+    public function getTotalPilot()
+    {
+        $total = User::where('role', 'PILOT')->count();
+
+        return response()->json([
+            'message' => 'Success',
+            'data' => $total
+        ], 200);
+    }
+
     public function getTotalPilotOnPort($portId)
     {
-        // Find the port by port_id
         $port = Port::where('port_id', $portId)->first();
 
         if (!$port) {
@@ -174,13 +194,12 @@ class UserController extends Controller
             ], 404);
         }
 
-        // Count distinct users associated with emissions for the found port
         $pilots = Emission::where('port_id', $port->id)
-                    ->with('users') // Eager load the users relationship
+                    ->with('users')
                     ->get()
-                    ->pluck('users') // Extract the users collection from each emission
-                    ->flatten() // Flatten the collection of collections into a single collection
-                    ->unique('id') // Remove duplicates based on user id
+                    ->pluck('users')
+                    ->flatten()
+                    ->unique('id')
                     ->count();
 
         return response()->json([

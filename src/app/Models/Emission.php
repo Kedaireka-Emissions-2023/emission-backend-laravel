@@ -64,4 +64,9 @@ class Emission extends Model
     {
         return $this->belongsToMany(User::class, 'emission_user');
     }
+
+    public function emissionData(): HasMany
+    {
+        return $this->hasMany(EmissionData::class, 'emission_id', 'id');
+    }
 }

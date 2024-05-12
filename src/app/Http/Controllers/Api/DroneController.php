@@ -47,6 +47,15 @@ class DroneController extends Controller
     public function getTotalDrone()
     {
         $total = Drone::count();
+        return response()->json([
+            'message' => 'Success',
+            'data' => $total
+        ], 200);
+    }
+
+    public function getTotalDroneWithEmissions()
+    {
+        $total = Drone::count();
         $totalEmission = Drone::whereHas('emissions')->count();
         return response()->json([
             'message' => 'Success',
