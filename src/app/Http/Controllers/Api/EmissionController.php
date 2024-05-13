@@ -334,7 +334,6 @@ class EmissionController extends Controller
                 ], 404);
             }
 
-            // Get the latest emission for the port
             $lastEmission = Emission::where('port_id', $port->id)->orderBy('date', 'desc')->first();
 
             if(!$lastEmission){
@@ -344,13 +343,10 @@ class EmissionController extends Controller
                 ], 404);
             }
 
-            // Get the latest emission data associated with the last emission based on date
             $lastEmissionData = $lastEmission->emissionData()->orderBy('date', 'desc')->first();
 
-            // Extract date and time from the latest emission data
             $lastEmissionDateTime = date('d F Y, H:i', strtotime($lastEmissionData->date . ' ' . $lastEmissionData->time));
 
-            // Calculate total emission data
             $totalEmissionData = $lastEmission->emissionData->count();
             $totalNO2 = $lastEmission->emissionData->sum('NO2');
             $totalNO = $lastEmission->emissionData->sum('NO');

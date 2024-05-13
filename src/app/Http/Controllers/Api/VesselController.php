@@ -58,10 +58,8 @@ class VesselController extends Controller
             $vesselWithEmission = Vessel::whereHas('emissions')->count();
             return response()->json([
                 'message' => 'Success',
-                'data' => [
-                    'Vessel' => $total,
-                    'Vessel with emission' => $vesselWithEmission
-                ]
+                'all' => $total,
+                'withEmission' => $vesselWithEmission
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -88,9 +86,7 @@ class VesselController extends Controller
 
             return response()->json([
                 'message' => 'Success',
-                'data' => [
-                    'Vessel with emission' => $vesselWithEmission
-                ]
+                'data' => $vesselWithEmission
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
