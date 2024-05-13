@@ -59,10 +59,8 @@ class DroneController extends Controller
         $totalEmission = Drone::whereHas('emissions')->count();
         return response()->json([
             'message' => 'Success',
-            'data' => [
-                'Drone' => $total,
-                'Drones with emission' => $totalEmission
-            ]
+            'all' => $total,
+            'withEmission' => $totalEmission
         ], 200);
     }
 
@@ -76,9 +74,7 @@ class DroneController extends Controller
                 })->count();
                 return response()->json([
                     'message' => 'Success',
-                    'data' => [
-                        'Drones with emission' => $droneWithEmission
-                    ]
+                    'data' => $droneWithEmission
                 ], 200);
             } else {
                 return response()->json([
