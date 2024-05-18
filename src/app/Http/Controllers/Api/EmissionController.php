@@ -345,6 +345,13 @@ class EmissionController extends Controller
 
             $lastEmissionData = $lastEmission->emissionData()->orderBy('date', 'desc')->first();
 
+            if(!$lastEmissionData){
+                return response()->json([
+                    'message' => 'No emission data found for this port',
+                    'data' => null
+                ], 404);
+            }
+
             $lastEmissionDateTime = date('d F Y, H:i', strtotime($lastEmissionData->date . ' ' . $lastEmissionData->time));
 
             $totalEmissionData = $lastEmission->emissionData->count();
