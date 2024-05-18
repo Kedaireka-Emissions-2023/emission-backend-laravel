@@ -65,6 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // Emission
         Route::get('emissions', [EmissionController::class, 'getAll']);
         Route::get('emissions/{id}', [EmissionController::class, 'getEmissionbyId']);
+        Route::get('emissions/bycheck/{checkId}', [EmissionController::class, 'getEmissionbyCheckingId']);
         Route::get('emissions/byvessel/{vesselId}', [EmissionController::class, 'getEmissionbyVesselId']);
         Route::get('emissions/bydrone/{droneId}', [EmissionController::class, 'getEmissionbyDroneId']);
         Route::get('emissions/byport/{portId}', [EmissionController::class, 'getEmissionbyPortId']);

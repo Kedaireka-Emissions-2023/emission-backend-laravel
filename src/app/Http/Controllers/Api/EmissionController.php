@@ -64,6 +64,43 @@ class EmissionController extends Controller
         ], 200);
     }
 
+    public function getEmissionbyCheckingId($checkingId)
+    {
+        $emission = Emission::where('checking_id', $checkingId)->first();
+        if ($emission) {
+            $emission->date = date('d F Y', strtotime($emission->date));
+            $emission->drone_name = Drone::find($emission->drone_id)->name;
+            $emission->port_name = Port::find($emission->port_id)->name;
+            $emission->vessel_name = Vessel::find($emission->vessel_id)->name;
+
+            $emission->makeHidden([
+                'drone_id',
+                'vessel_id',
+                'port_id',
+                'pilot',
+                'name',
+                'preparation',
+                'levels',
+                'lkh_th',
+                'osha_th',
+                'who_th',
+                'link',
+                'created_at',
+                'updated_at',
+            ]);
+
+            return response()->json([
+                'message' => 'Success',
+                'data' => $emission
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Emission not found',
+                'data' => null
+            ], 404);
+        }
+    }
+
     public function getEmissionbyId($id)
     {
         $emission = Emission::with('drone', 'vessel', 'port')->find($id);
