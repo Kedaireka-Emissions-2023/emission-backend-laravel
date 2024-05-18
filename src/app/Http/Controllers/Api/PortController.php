@@ -92,6 +92,7 @@ class PortController extends Controller
             $port->phone_number = $request->phone_number;
             $port->longitude = $request->longitude;
             $port->latitude = $request->latitude;
+            $port->port_id = $request->port_id;
             $port->save();
 
             return response()->json([
