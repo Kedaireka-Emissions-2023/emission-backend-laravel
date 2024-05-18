@@ -162,16 +162,48 @@ class UserController extends Controller
         }
     }
 
-    public function getAllPilot(){
-        $pilots = User::where('role', 'PILOT')->get();
+    public function getAllPilot(Request $request){
+        try {
+            $page = $request->query('page');
+            $limit = $request->query('limit');
+            $query = $request->query('q');
 
-        $pilots->makeHidden(['created_at', 'updated_at', 'email_verified_at', 'password', 'port_id', 'company_address', 'company_name', 'email_recovery']);
+            $pilots = User::where('role', 'PILOT')
+                ->where('full_name', 'like', '%' . $query . '%')
+                ->orWhere('email', 'like', '%' . $query . '%')
+                ->orWhere('company_name', 'like', '%' . $query . '%')
+                ->orWhere('phone_number', 'like', '%' . $query . '%')
+                ->orWhere('company_address', 'like', '%' . $query . '%')
+                ->paginate($limit, ['*'], 'page', $page);
 
-        return response()->json([
-            'message' => 'Success',
-            'data' => $pilots
-        ], 200);
+            if ($pilots->isEmpty()) {
+                return response()->json([
+                    'message' => 'Pilots not found',
+                ], 404);
+            }
+
+            $pilots->makeHidden(['created_at', 'updated_at', 'email_verified_at', 'password', 'port_id', 'company_address', 'company_name', 'email_recovery']);
+
+            return response()->json([
+                'message' => 'Success',
+                'data' => $pilots
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Failed',
+                'data' => $th->getMessage()
+            ], 400);
+        }
     }
+
+    // $pilots = User::where('role', 'PILOT')->get();
+
+    //     $pilots->makeHidden(['created_at', 'updated_at', 'email_verified_at', 'password', 'port_id', 'company_address', 'company_name', 'email_recovery']);
+
+    //     return response()->json([
+    //         'message' => 'Success',
+    //         'data' => $pilots
+    //     ], 200);
 
     public function getTotalPilot()
     {
