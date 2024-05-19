@@ -108,6 +108,7 @@ class EmissionController extends Controller
         $emission = Emission::with('drone', 'vessel', 'port')->find($id);
         if ($emission) {
             $emission->date = date('d F Y', strtotime($emission->date));
+            $emission->pilot = $emission->users->pluck('full_name');
             return response()->json([
                 'message' => 'Success',
                 'data' => $emission

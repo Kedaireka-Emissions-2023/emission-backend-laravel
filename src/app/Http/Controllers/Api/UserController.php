@@ -169,11 +169,13 @@ class UserController extends Controller
             $query = $request->query('q');
 
             $pilots = User::where('role', 'PILOT')
-                ->where('full_name', 'like', '%' . $query . '%')
-                ->orWhere('email', 'like', '%' . $query . '%')
-                ->orWhere('company_name', 'like', '%' . $query . '%')
-                ->orWhere('phone_number', 'like', '%' . $query . '%')
-                ->orWhere('company_address', 'like', '%' . $query . '%')
+                ->where(function($innerQuery) use ($query) {
+                    $innerQuery->where('full_name', 'like', '%' . $query . '%')
+                    ->orWhere('email', 'like', '%' . $query . '%')
+                    ->orWhere('company_name', 'like', '%' . $query . '%')
+                    ->orWhere('phone_number', 'like', '%' . $query . '%')
+                    ->orWhere('company_address', 'like', '%' . $query . '%');
+                })
                 ->paginate($limit, ['*'], 'page', $page);
 
             if ($pilots->isEmpty()) {
