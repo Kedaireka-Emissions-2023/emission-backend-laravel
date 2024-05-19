@@ -466,6 +466,7 @@ class EmissionController extends Controller
                 'to' => $vessel->voyage_route_to,
                 'date' => date('d F Y', strtotime($emission->date)),
                 'serial_number' => $drone->serial_number,
+                'drone_name' => $drone->name,
                 'pilots' => $pilots->pluck('full_name'),
                 'status' => $emission->status,
             ];
