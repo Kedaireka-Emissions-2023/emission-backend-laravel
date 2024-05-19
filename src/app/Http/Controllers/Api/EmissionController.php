@@ -15,6 +15,8 @@ use App\Models\User;
 use App\Models\Drone;
 use App\Models\Vessel;
 use App\Models\Port;
+use App\Models\EmissionData;
+use App\Models\EmissionUser;
 
 class EmissionController extends Controller
 {
@@ -434,6 +436,132 @@ class EmissionController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Failed to get emission rate',
+                'data' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getEDup($checkingId)
+    {
+        try {
+            $emission = Emission::where('checking_id', $checkingId)->first();
+
+            if(!$emission){
+                return response()->json([
+                    'message' => 'Emission not found',
+                    'data' => null
+                ], 404);
+            }
+
+            $port = Port::find($emission->port_id);
+            $vessel = Vessel::find($emission->vessel_id);
+            $drone = Drone::find($emission->drone_id);
+            $pilots = $emission->users;
+
+            $result = [
+                'location' => 'Port ' . $port->name,
+                'imo_number' => $vessel->imo_number,
+                'vessel_name' => $vessel->name,
+                'from' => $vessel->voyage_route_from,
+                'to' => $vessel->voyage_route_to,
+                'date' => date('d F Y', strtotime($emission->date)),
+                'serial_number' => $drone->serial_number,
+                'pilots' => $pilots->pluck('full_name'),
+                'status' => $emission->status,
+            ];
+
+            return response()->json([
+                'message' => 'Success',
+                'data' => $result
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to get emission detail (Up Section)',
+                'data' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getEDDown($checkingId)
+    {
+        try {
+            $emissionData = EmissionData::whereHas('emission', function($query) use ($checkingId) {
+                $query->where('checking_id', $checkingId);
+            })->orderBy('date')->orderBy('time')->get();
+
+            $filteredData = [];
+            $seenMinutes = [];
+            $maxTotalDataPoints = 60;
+
+            foreach ($emissionData as $data) {
+                $dateTime = $data->date . ' ' . $data->time;
+                $minute = date('Y-m-d H:i', strtotime($dateTime));
+
+                if (!isset($seenMinutes[$minute]) && count($filteredData) < $maxTotalDataPoints) {
+                    $dataClone = clone $data;
+                    unset($dataClone->id, $dataClone->emission_id, $dataClone->altitude, $dataClone->longitude, $dataClone->latitude);
+
+                    $filteredData[] = $dataClone;
+                    $seenMinutes[$minute] = true;
+                }
+
+                if (count($filteredData) >= $maxTotalDataPoints) {
+                    break;
+                }
+            }
+
+            $totalValues = [
+                'NO2' => 0,
+                'NO' => 0,
+                'SO2' => 0,
+                'CO2' => 0,
+                'CO' => 0,
+                'PM2_5' => 0,
+                'PM10' => 0,
+            ];
+            $counts = [
+                'NO2' => 0,
+                'NO' => 0,
+                'SO2' => 0,
+                'CO2' => 0,
+                'CO' => 0,
+                'PM2_5' => 0,
+                'PM10' => 0,
+            ];
+
+            foreach ($filteredData as $data) {
+                foreach ($totalValues as $key => &$total) {
+                    if (!is_null($data->$key)) {
+                        $total += $data->$key;
+                        $counts[$key]++;
+                    }
+                }
+            }
+
+            $means = [];
+            foreach ($totalValues as $key => $total) {
+                $means[$key] = $counts[$key] > 0 ? $total / $counts[$key] : null;
+            }
+
+            $threshold = [
+                'NO2' => 10.45,
+                'NO' => 9.91,
+                'SO2' => 8.23,
+                'CO2' => 11.01,
+                'CO' => 13.95,
+                'PM2_5' => 7.23,
+                'PM10' => 9.45,
+            ];
+
+            return response()->json([
+                'message' => 'Success',
+                'data' => $filteredData,
+                'means' => $means,
+                'threshold' => $threshold
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to get emission detail (Down Section)',
                 'data' => $e->getMessage()
             ], 500);
         }

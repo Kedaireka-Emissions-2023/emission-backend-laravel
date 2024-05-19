@@ -72,14 +72,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('emissions/bypilot/{pilotId}', [EmissionController::class, 'getEmissionbyPilotId']);
         Route::get('emissions/b/filtered', [EmissionController::class, 'getFilteredEmission']);
         Route::get('emissions/b/countStatus', [EmissionController::class, 'countStatus']);
-        // Test
         Route::get('emissions/test/{emissionId}', [EmissionController::class, 'testRelationships']);
 
-        // Port
-        Route::get('ports', [PortController::class, 'getAll']);
-        Route::get('ports/{id}', [PortController::class, 'getPortbyId']);
-        Route::get('ports/direct/{id}', [PortController::class, 'directGet']);
-        Route::post('ports/direct/update', [PortController::class, 'directUpdate']);
+        // Emission Detail
+        Route::get('emission-details/up/{checkingId}', [EmissionController::class, 'getEDUp']);
+        Route::get('emission-details/down/{checkingId}', [EmissionController::class, 'getEDDown']);
 
         // Emission-Result
         Route::get('emission-results', [EmissionResultController::class, 'getAllEmissionResult']);
@@ -88,6 +85,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('emission-results', [EmissionResultController::class, 'createEmissionResult']);
         Route::post('emission-results/update', [EmissionResultController::class, 'updateEmissionResult']);
         Route::delete('emission-results/{id}', [EmissionResultController::class, 'deleteEmissionResult']);
+
+        // Port
+        Route::get('ports', [PortController::class, 'getAll']);
+        Route::get('ports/{id}', [PortController::class, 'getPortbyId']);
+        Route::get('ports/direct/{id}', [PortController::class, 'directGet']);
+        Route::post('ports/direct/update', [PortController::class, 'directUpdate']);
 
         // Pilot
         Route::get('pilots', [UserController::class, 'getAllPilot']);
