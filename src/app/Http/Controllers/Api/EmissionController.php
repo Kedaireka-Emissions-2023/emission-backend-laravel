@@ -628,6 +628,22 @@ class EmissionController extends Controller
             try {
                 $emission->update($request->all());
 
+                if ($request->has('pilot')) {
+                    $existingPilots = User::whereIn('id', $request->pilot)->pluck('id')->toArray();
+                    $requestedPilots = $request->input('pilot');
+                    $nonExistingPilots = array_diff($requestedPilots, $existingPilots);
+
+                    if (!empty($nonExistingPilots)) {
+                        return response()->json([
+                            'message' => 'Failed',
+                            'data' => 'One or more pilot IDs do not exist.'
+                        ], 400);
+                    }
+
+                    $emission->users()->sync($request->pilot);
+                    $emission->pilot = $emission->users->pluck('full_name');
+                }
+
                 return response()->json([
                     'message' => 'Success',
                     'data' => $emission
