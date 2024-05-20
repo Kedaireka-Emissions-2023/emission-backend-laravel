@@ -77,6 +77,11 @@ class EmissionController extends Controller
             $emission->port_name = Port::find($emission->port_id)->name;
             $emission->vessel_name = Vessel::find($emission->vessel_id)->name;
 
+            if($emission->photo){
+                $emission->photo = json_decode($emission->photo, true);
+                $emission->photo_count = count($emission->photo);
+            }
+
             $emission->makeHidden([
                 'drone_id',
                 'vessel_id',
@@ -113,6 +118,12 @@ class EmissionController extends Controller
             $emission->date = date('d F Y', strtotime($emission->date));
             $emission->pilot = $emission->users->pluck('full_name');
             $emission->pilot_id = $emission->users->pluck('id');
+
+            if($emission->photo){
+                $emission->photo = json_decode($emission->photo, true);
+                $emission->photo_count = count($emission->photo);
+            }
+
             return response()->json([
                 'message' => 'Success',
                 'data' => $emission
@@ -593,6 +604,7 @@ class EmissionController extends Controller
                 'date' => 'required',
                 'pilot' => 'required|array',
                 'pilot.*' => 'required|integer',
+                'photos.*' => 'file|mimes:jpg,jpeg,png|max:2048',
             ]);
 
             $existingEmission = Emission::where('checking_id', $request->checking_id)->first();
@@ -606,7 +618,6 @@ class EmissionController extends Controller
             $existingPilots = User::whereIn('id', $request->pilot)->pluck('id')->toArray();
             $requestedPilots = $request->input('pilot');
             $nonExistingPilots = array_diff($requestedPilots, $existingPilots);
-
             if (!empty($nonExistingPilots)) {
                 return response()->json([
                     'message' => 'Failed',
@@ -614,9 +625,21 @@ class EmissionController extends Controller
                 ], 400);
             }
 
-            $emission = Emission::create($request->except('pilot'));
+            $photoPaths = [];
+            if ($request->hasFile('photos')) {
+                foreach ($request->file('photos') as $photo) {
+                    $path = $photo->store('photos', 'public');
+                    $photoPaths[] = $path;
+                }
+            }
+
+            $emission = Emission::create($request->except('pilot', 'photos'));
 
             $emission->users()->attach($request->pilot);
+
+            $emission->photo = json_encode($photoPaths);
+
+            $emission->save();
 
             return response()->json([
                 'message' => 'Success',
@@ -697,6 +720,39 @@ class EmissionController extends Controller
                 'message' => 'Emission not found',
                 'data' => null
             ], 404);
+        }
+    }
+
+    public function showPhoto($id, $photoIndex)
+    {
+        try {
+            $emission = Emission::findOrFail($id);
+
+            $photos = json_decode($emission->photo, true);
+
+            if (!isset($photos[$photoIndex])) {
+                return response()->json([
+                    'message' => 'Failed',
+                    'data' => 'Photo not found.'
+                ], 404);
+            }
+
+            $photoPath = $photos[$photoIndex];
+
+            if (!Storage::disk('public')->exists($photoPath)) {
+                return response()->json([
+                    'message' => 'Failed',
+                    'data' => 'File not found.'
+                ], 404);
+            }
+
+            return response()->file(storage_path('app/public/' . $photoPath));
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed',
+                'data' => $e->getMessage()
+            ], 500);
         }
     }
 

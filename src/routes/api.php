@@ -44,6 +44,8 @@ Route::post('emission-data', [EmissionDataController::class, 'createEmissionData
 Route::post('emission-data/update', [EmissionDataController::class, 'updateEmissionData']);
 Route::delete('emission-data/{id}', [EmissionDataController::class, 'deleteEmissionData']);
 
+Route::get('emissions/{id}/photos/{photoIndex}', [EmissionController::class, 'showPhoto']);
+
 Route::middleware('auth:sanctum')->group(function () {
     // User
     Route::get('profile', [UserController::class, 'profile']);
