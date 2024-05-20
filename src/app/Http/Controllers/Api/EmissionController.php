@@ -109,8 +109,8 @@ class EmissionController extends Controller
     {
         $emission = Emission::with('drone', 'vessel', 'port')->find($id);
         if ($emission) {
-            $emission->date = date('d F Y', strtotime($emission->date));
             $emission->unformatted_date = $emission->date;
+            $emission->date = date('d F Y', strtotime($emission->date));
             $emission->pilot = $emission->users->pluck('full_name');
             $emission->pilot_id = $emission->users->pluck('id');
             return response()->json([
@@ -143,8 +143,8 @@ class EmissionController extends Controller
         }
 
         foreach ($emissions as $emission) {
-            $emission->date = date('d F Y', strtotime($emission->date));
             $emission->unformatted_date = $emission->date;
+            $emission->date = date('d F Y', strtotime($emission->date));
             $emission->drone_name = Drone::find($emission->drone_id)->name;
             $emission->port_name = Port::find($emission->port_id)->name;
             $emission->vessel_name = Vessel::find($emission->vessel_id)->name;
@@ -205,8 +205,8 @@ class EmissionController extends Controller
         }
 
         foreach ($emissions as $emission) {
-            $emission->date = date('d F Y', strtotime($emission->date));
             $emission->unformatted_date = $emission->date;
+            $emission->date = date('d F Y', strtotime($emission->date));
             $emission->drone_name = Drone::find($emission->drone_id)->name;
             $emission->port_name = Port::find($emission->port_id)->name;
             $emission->vessel_name = Vessel::find($emission->vessel_id)->name;
@@ -252,8 +252,8 @@ class EmissionController extends Controller
         }
 
         foreach ($emissions as $emission) {
-            $emission->date = date('d F Y', strtotime($emission->date));
             $emission->unformatted_date = $emission->date;
+            $emission->date = date('d F Y', strtotime($emission->date));
             $emission->drone_name = Drone::find($emission->drone_id)->name;
             $emission->port_name = Port::find($emission->port_id)->name;
             $emission->vessel_name = Vessel::find($emission->vessel_id)->name;
@@ -299,8 +299,8 @@ class EmissionController extends Controller
         }
 
         foreach ($emissions as $emission) {
-            $emission->date = date('d F Y', strtotime($emission->date));
             $emission->unformatted_date = $emission->date;
+            $emission->date = date('d F Y', strtotime($emission->date));
             $emission->drone_name = Drone::find($emission->drone_id)->name;
             $emission->port_name = Port::find($emission->port_id)->name;
             $emission->vessel_name = Vessel::find($emission->vessel_id)->name;
@@ -342,8 +342,8 @@ class EmissionController extends Controller
         }
 
         foreach ($emissions as $emission) {
-            $emission->date = date('d F Y', strtotime($emission->date));
             $emission->unformatted_date = $emission->date;
+            $emission->date = date('d F Y', strtotime($emission->date));
             $emission->drone_name = Drone::find($emission->drone_id)->name;
             $emission->port_name = Port::find($emission->port_id)->name;
             $emission->vessel_name = Vessel::find($emission->vessel_id)->name;
