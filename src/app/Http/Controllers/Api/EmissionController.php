@@ -112,6 +112,7 @@ class EmissionController extends Controller
             $emission->date = date('d F Y', strtotime($emission->date));
             $emission->unformatted_date = $emission->date;
             $emission->pilot = $emission->users->pluck('full_name');
+            $emission->pilot_id = $emission->users->pluck('id');
             return response()->json([
                 'message' => 'Success',
                 'data' => $emission
@@ -480,6 +481,7 @@ class EmissionController extends Controller
                 'serial_number' => $drone->serial_number,
                 'drone_name' => $drone->name,
                 'pilots' => $pilots->pluck('full_name'),
+                'pilot_ids' => $pilots->pluck('id'),
                 'status' => $emission->status,
             ];
 
