@@ -766,8 +766,6 @@ class EmissionController extends Controller
                 ], 404);
             }
 
-            dd(storage_path('app/public/' . $photoPath));
-
             return response()->file(storage_path('app/public/' . $photoPath));
 
         } catch (\Exception $e) {
