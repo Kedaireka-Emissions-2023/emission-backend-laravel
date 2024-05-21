@@ -662,7 +662,24 @@ class EmissionController extends Controller
         $emission = Emission::find($request->id);
         if ($emission) {
             try {
-                $emission->update($request->all());
+                $photoPaths = [];
+                if ($request->hasFile('photos')) {
+                    $oldPhotoPaths = json_decode($emission->photo, true);
+                    if (is_array($oldPhotoPaths)) {
+                        foreach ($oldPhotoPaths as $oldPhoto) {
+                            Storage::disk('public')->delete($oldPhoto);
+                        }
+                    }
+
+                    foreach ($request->file('photos') as $photo) {
+                        $path = $photo->store('photos', 'public');
+                        $photoPaths[] = $path;
+                    }
+                } else {
+                    $photoPaths = json_decode($emission->photo, true);
+                }
+
+                $emission->update($request->except('pilot', 'photos'));
 
                 if ($request->has('pilot')) {
                     $existingPilots = User::whereIn('id', $request->pilot)->pluck('id')->toArray();
@@ -679,6 +696,9 @@ class EmissionController extends Controller
                     $emission->users()->sync($request->pilot);
                     $emission->pilot = $emission->users->pluck('full_name');
                 }
+
+                $emission->photo = json_encode($photoPaths);
+                $emission->save();
 
                 return response()->json([
                     'message' => 'Success',
