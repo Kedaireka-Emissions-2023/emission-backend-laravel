@@ -155,14 +155,38 @@ class EmissionDataController extends Controller
         try {
             $request->validate([
                 'checking_id' => 'required',
-                'vessel_id' => 'required',
-                'drone_id' => 'required',
-                'port_id' => 'required',
                 'date' => 'required',
             ]);
 
             $emission = Emission::where('checking_id', $request->checking_id)->first();
             if(!$emission){
+                $request->validate([
+                    'vessel_id' => 'required',
+                    'drone_id' => 'required',
+                    'port_id' => 'required',
+                ]);
+
+                $vessel = Vessel::find($request->vessel_id);
+                if(!$vessel){
+                    return response()->json([
+                        'message' => 'Vessel not found!'
+                    ], 404);
+                }
+
+                $drone = Drone::find($request->drone_id);
+                if(!$drone){
+                    return response()->json([
+                        'message' => 'Drone not found!'
+                    ], 404);
+                }
+
+                $port = Port::find($request->port_id);
+                if(!$port){
+                    return response()->json([
+                        'message' => 'Port not found!'
+                    ], 404);
+                }
+
                 $emission = Emission::create([
                     'checking_id' => $request->checking_id,
                     'vessel_id' => $request->vessel_id,
