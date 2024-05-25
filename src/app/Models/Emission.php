@@ -27,6 +27,7 @@ class Emission extends Model
         'preparation',
         'date',
         'time',
+        'duration_apx',
         'status',
         'levels',
         'lkh_th',

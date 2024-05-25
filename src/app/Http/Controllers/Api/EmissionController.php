@@ -511,29 +511,46 @@ class EmissionController extends Controller
     public function getEDDown($checkingId)
     {
         try {
+            $emission = Emission::where('checking_id', $checkingId)->first();
+            $durationApx = $emission ? $emission->duration_apx : null;
+
+            $maxTotalDataPoints = 80;
+            $emissionDataPerMinute = 1; // Default to 1 data point per minute if duration_apx is null
+
+            if (!is_null($durationApx)) {
+                $emissionDataPerMinute = ceil($maxTotalDataPoints / $durationApx);
+            }
+
             $emissionData = EmissionData::whereHas('emission', function($query) use ($checkingId) {
                 $query->where('checking_id', $checkingId);
             })->orderBy('date')->orderBy('time')->get();
 
             $filteredData = [];
             $seenMinutes = [];
-            $maxTotalDataPoints = 60;
 
             foreach ($emissionData as $data) {
                 $dateTime = $data->date . ' ' . $data->time;
                 $minute = date('Y-m-d H:i', strtotime($dateTime));
 
-                if (!isset($seenMinutes[$minute]) && count($filteredData) < $maxTotalDataPoints) {
+                if (!isset($seenMinutes[$minute])) {
+                    $seenMinutes[$minute] = 0;
+                }
+
+                if ($seenMinutes[$minute] < $emissionDataPerMinute) {
                     $dataClone = clone $data;
                     unset($dataClone->id, $dataClone->emission_id, $dataClone->altitude, $dataClone->longitude, $dataClone->latitude);
 
                     $filteredData[] = $dataClone;
-                    $seenMinutes[$minute] = true;
-                }
+                    $seenMinutes[$minute]++;
 
-                if (count($filteredData) >= $maxTotalDataPoints) {
-                    break;
+                    if (count($filteredData) >= $maxTotalDataPoints + 5) {
+                        break;
+                    }
                 }
+            }
+
+            if (count($filteredData) > $maxTotalDataPoints) {
+                $filteredData = array_slice($filteredData, 0, $maxTotalDataPoints);
             }
 
             $totalValues = [
