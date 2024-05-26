@@ -583,7 +583,7 @@ class EmissionController extends Controller
 
             $means = [];
             foreach ($totalValues as $key => $total) {
-                $means[$key] = $counts[$key] > 0 ? $total / $counts[$key] : null;
+                $means[$key] = $counts[$key] > 0 ? $total / $counts[$key] : 0;
             }
 
             $threshold = [
