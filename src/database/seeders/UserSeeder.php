@@ -155,6 +155,39 @@ class UserSeeder extends Seeder
                 'port_id' => null
             ]);
 
+            User::firstOrCreate(['email' => 'oline@kedaireka.id'], [
+                'full_name' => 'Oline Manuel Chay',
+                'email' => 'oline@kedaireka.id',
+                'nik' => '8738043136242860',
+                'phone_number' => '081574014889',
+                'status' => 'VALID',
+                'role' => 'PILOT',
+                'password' => bcrypt('Password'),
+                'port_id' => null
+            ]);
+
+            User::firstOrCreate(['email' => 'erine@kedaireka.id'], [
+                'full_name' => 'Catherine Valencia',
+                'email' => 'erine@kedaireka.id',
+                'nik' => '8738043136242860',
+                'phone_number' => '081574014889',
+                'status' => 'VALID',
+                'role' => 'BKI',
+                'password' => bcrypt('Password'),
+                'port_id' => null
+            ]);
+
+            User::firstOrCreate(['email' => 'delyn@kedaireka.id'], [
+                'full_name' => 'Adeline Wijaya',
+                'email' => 'delyn@kedaireka.id',
+                'nik' => '8738043136242860',
+                'phone_number' => '081574014889',
+                'status' => 'VALID',
+                'role' => 'PORT',
+                'password' => bcrypt('Password'),
+                'port_id' => 1
+            ]);
+
             User::firstOrCreate(['email' => 'megaputra@kedaireka.id'], [
                 'full_name' => 'Mega Putra',
                 'email' => 'megaputra@kedaireka.id',
