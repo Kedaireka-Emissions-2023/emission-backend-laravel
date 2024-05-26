@@ -11,6 +11,8 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
+        DB::table('users')->delete();
+
         DB::transaction(function () {
             User::firstOrCreate(['email' => 'bki-test@kedaireka.id'], [
                 'full_name' => "[Test] Kedaireka BKI",

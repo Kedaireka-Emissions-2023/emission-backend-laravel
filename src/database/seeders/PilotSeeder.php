@@ -13,6 +13,8 @@ class PilotSeeder extends Seeder
 {
     public function run(): void
     {
+        DB::table('emission_user')->delete();
+
         DB::transaction(function () {
             EmissionUser::create([
                 'emission_id' => 1,
