@@ -515,7 +515,7 @@ class EmissionController extends Controller
             $durationApx = $emission ? $emission->duration_apx : null;
 
             $maxTotalDataPoints = 80;
-            $emissionDataPerMinute = 1; // Default to 1 data point per minute if duration_apx is null
+            $emissionDataPerMinute = 1;
 
             if (!is_null($durationApx)) {
                 $emissionDataPerMinute = ceil($maxTotalDataPoints / $durationApx);
@@ -596,11 +596,23 @@ class EmissionController extends Controller
                 'PM10' => 9.45,
             ];
 
+            $statuses = [];
+            foreach ($means as $key => $mean) {
+                if ($mean == 0) {
+                    $statuses[$key] = 'Not checked';
+                } elseif ($mean < $threshold[$key]) {
+                    $statuses[$key] = 'Tolerate';
+                } else {
+                    $statuses[$key] = 'Not Tolerate';
+                }
+            }
+
             return response()->json([
                 'message' => 'Success',
                 'data' => $filteredData,
                 'means' => $means,
-                'threshold' => $threshold
+                'threshold' => $threshold,
+                'statuses' => $statuses
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
