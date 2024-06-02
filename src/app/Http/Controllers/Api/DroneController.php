@@ -22,6 +22,10 @@ class DroneController extends Controller
             ->orWhere('serial_number', 'like', '%' . $query . '%')
             ->paginate($limit, ['*'], 'page', $page);
 
+        $drones->each(function ($drone) {
+            $drone->total_emissions = $drone->emissions->count();
+        });
+
         return response()->json([
             'message' => 'Success',
             'data' => $drones
@@ -189,6 +193,9 @@ class DroneController extends Controller
             if($request->hasFile('cert_drone_certificate'))
                 $drone->cert_drone_certificate = $request->file('cert_drone_certificate')->store('cert_drone_certificate', 'public');
             $drone->expiration_date = $request->expiration_date ?? $drone->expiration_date;
+
+            $drone->save();
+
             return response()->json([
                 'message' => 'Drone updated!',
                 'data' => $drone

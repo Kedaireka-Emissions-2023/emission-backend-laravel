@@ -89,7 +89,7 @@ class EmissionResultController extends Controller
             return $response;
         } else {
             return response()->json([
-                'message' => 'Emission checking file not found',
+                'message' => 'File not found',
                 'data' => null
             ], 404);
         }
