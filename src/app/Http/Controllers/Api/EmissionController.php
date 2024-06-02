@@ -339,11 +339,16 @@ class EmissionController extends Controller
         ], 200);
     }
 
-    public function getEmissionbyPilotId($pilotId)
+    public function getEmissionbyPilotId(Request $request, $pilotId)
     {
-        $emissions = Emission::whereHas('users', function ($query) use ($pilotId) {
+        $page = $request->query('page');
+        $limit = $request->query('limit');
+        $query = $request->query('q');
+
+        $emissions = Emission::whereHas('users', function($query) use ($pilotId) {
             $query->where('users.id', $pilotId);
-        })->get();
+        })->orWhere('name', 'like', '%' . $query . '%')
+        ->paginate($limit, ['*'], 'page', $page);
 
         if ($emissions->isEmpty()) {
             return response()->json([
